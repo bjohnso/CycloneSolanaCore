@@ -21,7 +21,7 @@ class Base58UnitTest {
     }
 
     @Test
-    fun `decode_to_from_58_is_correct`() {
+    fun `decode_from_base_58_is_correct`() {
         val hex = "BD284FDE1526B7B936A76BDE6D8955B6617E56A01E5D0309DEDA3C426E0A7CA0"
         val expected = hex.hexToByteArray()
 

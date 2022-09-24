@@ -1,7 +1,6 @@
 package com.cyclone.solana.core
 
-import com.cyclone.solana.core.extensions.hexToByteArray
-import com.cyclone.solana.core.extensions.toEd25519PublicKeyParameters
+import com.cyclone.solana.core.extensions.*
 import com.cyclone.solana.core.usecase.Base58Encoder
 import com.cyclone.solana.core.usecase.SeedDeriver
 import org.junit.Assert.assertArrayEquals
@@ -10,78 +9,81 @@ import org.junit.Test
 class SeedDeriverUnitTest {
     @Test
     fun `derived_key_pairs_are_correct`() {
+        val hexSeed = "b35cd271ce77c440d5aac7fd591403e3"
+        
         val expected = listOf(
-            "GSExUw6i46nxjHRA6zH1eNfKqxm5UCBCeRFXeiZdBR2n",
-            "CZpat4LpHiBLCRohhLehncLY5wAQMM3K6NjmUgBx8u6h",
-            "A2B3HgyZ4bf53uSxQihhzW5XAYNJh9bT4zfDNtycfcXu",
-            "BqiL9J3938vAgGYfbKafWGSe5j1F9Kf3YZuKnPwcq3RJ",
-            "8HDyYN8B9Wq9ZUG5wYvYP67pozqGCVtNYDH1Z8Nu7ZrH",
-            "8ZKY7kQxuiKZDx7zT2qDs3D9NSCjdL81TMBxKSi3Bemn",
-            "EWK4inYmvXfRTAaocyZoX9ieiKPY4K1EgDALaTqsShHX",
-            "HadaGuqCEGq6ZgzkUkXGko8MG8UU4G1WHyKSSiv2QMSJ",
-            "A9aP8i8uvDS38NjP1qVXqAjNhrkTsJVrESDUofZmXxx",
-            "AitbP2ytkdSYGceCQwvpL2Jh8MWzMrsypogEMrX9UiqH",
-            "EWwwH45c9auAwPv4mXZta2k7kpmu5PUCZfvPEiLoFLmH",
-            "7QdLSxTwWCcnR71x1WY6pNYVRdX6T6qr88RZ8zmqUco5",
-            "EgAC3HHVbZEgSGbSet9xTMaNYTQTM1i23Pgr5ykJp5BT",
-            "9zUCkEhydSbX4Chxfpx8BuqpPCy6N9BBM4eujkFL1ubz",
-            "i7xeT5MwACRExDE8bHARofoZxp1d5AqeRsokDcKavCV",
-            "HFq25Vxx2B63MbW38ZAKPX1fSJMCFdjaY7fUSgDzrCKM",
-            "A1VTu7qV93g1HYpAY8UqUcUq5MGsoKUNZMPp8Bz56cs5",
-            "5Voh4CgMGkGvVKRte1pMfH8hBwhya6HffAr8NAt8E4wn",
-            "F6i1SP1pEBpT3i1frDngjPH9wfnWyHwfEhFiYtiaaxji",
-            "22qxKTApKs8k5A8JudLpRXMpWLLTLaF44spNret5y1L7",
-            "FVS4VNenX2NuL1pfgAz16aXaZ4MEmQKk81ZAxT4nEekp",
-            "59JNbA9Zz2thhGzSzEC5pde18PnXZzYwc3S6ge8KGAzR",
-            "AEzLWr5BQSHqod8X5r5t6631ZGeWCzMTowiFpxoHvA5i",
-            "AU9jVXwXCG1kAo6begTSNcgU3tKGKPWUjBsyvpiLddNt",
-            "5XX1WNw9fGKysygP7nb2iCb8HZZAoKyTy3LiHbtLGH1c",
-            "6p8yGPg1t9DgK2WvLQ1zUazwAyzGQWVVzeCvvGDSPe7c",
-            "7ctzEAot3QvNbGu5RoFyQLqkUhniNjiiQgmh1Gw7io4T",
-            "A7zNT7sNP7vDnKgtyj162BzsspXyyp6ybWsBQNsD3rc",
-            "EAS4g6pbuGxJuahZQ6d3anEqaYbbs94rGKKvTY9Rpm43",
-            "J6jtgvURFRsoZ8ZC7aeR2nWWLti59PX26xJh4ZNeQ4G1",
-            "FQDKJkh5XBD8EVLyDmUCbdyweQk4aUn69BZrKxaeN4sd",
-            "H8AzPBuBhqL2As3BKJ91b6hAn8rscgwz8h5vkGd1aQFU",
-            "2VA4Mx1iiaHuYyEWEZWAQc9cnf1ZbGvBcomRYyASe5Pj",
-            "H2wuxnDgimD3DWFkakPtoRqGjk7pwMhe8bxZ8PkaVXEs",
-            "CupHfezJj3rzG9SZohwRq4i2xa4rMB7B6B1rXgdXFDZt",
-            "DSAi12uqWC8TzHf2Mbctom2TunqASPjXUoZxtXh2XaSA",
-            "FN688Z45gt38znZ4gqNztYoopPVvwNPE64UFgL6RBMLX",
-            "dfiSnuP4Aqn2QUvXLkyT7Ka15RAoZdGoLHAE675t2ic",
-            "GCZBdQ4KkRcdk6jYLYvogdcPLFAMrSnGbKiAYgJQhZ4M",
-            "9FURVbbgdaDVrtgmxy2n7yHDimYT1XpkS4TuYa9prgf9",
-            "3A7LD7PHcyfK9SATrzELn69FvoUmvb7jyqrRzDUfKFTu",
-            "2UczBU5DV4vGxy8BU8ayg9ZS5JQsRos8itNvViLxgVQg",
-            "BSnHSJwq6pqhGc7Q6JtcfcFLTNgRVKx7YWhBrj8MVXGM",
-            "AKsNA87ecLSyWcxmrNLVzGmKiqzUfYHi9MQmLTWcB5DC",
-            "4oeEgkSGAViyQdXDVECGXeqntcWkSEkT5H2tfRScjEyQ",
-            "hJwwowYmVMuq59kNY6yLP3xSij6dbhcJG1Qfu4pbmbs",
-            "ECrpGTFpzdaVF2XAAdnytdYxwBUb9dZenv2NKMLmtemP",
-            "FPtdCYxz5zarkjtoQzdUF3VSnymhi3xMhUW1P9ukrccN",
-            "5ywmPkd9NuS3v94ncUrVAS1yutdNNt6296GbPTVxh97u",
-            "9cWYpL8awjUA6QfUzSNLJe5dCojSkxJamGr66564svqv",
-            "Fsp6Db593Ey7e5XVBNAHRyMj4Xam8YGcsrk3cmbf3YWq",
-            "67ynwHZ7AKU4nqSUS958WNywRVJmMskvLSSVU9L1dqxS",
-            "6Mt59vaQQKL2CaffpYyewqKz6CEeckmTnirQPPEKxJRB",
-            "AZ56ZmcB2XatvqRNpqLBKzv5kt6dEfT1ThaWHQ57oqPk",
-            "G5eQqi8dP55HurURRNV7ij51cxhKSHMuPgVqVfKkmhLW",
-            "5hUuu9JzphbgrvpL3cVcBh8LpeYBC2NNm5DmBBrgVzoE",
-            "CEF1szXmncDUJg7Zz4P4H9G8qMWpqzLhgbxhZPshV9Lf",
-            "ARFxPTqK2z36XobugaA3QVdrsaPED7tUw1s417oaUz1t",
-            "AshGXYocisUS7nG8M9JGW81WSwCcV8CWVqRb6PCpoYYu",
-            "EUWHq8RQvzE44EyjkZR2W9CQxHyXB9Fa864okdN8F2R4",
-            "vx2txXc5SY9SKJbrk8Fga4pzk1U5wERih6UGDXYb6GC",
-            "4s6bYJT5soUKKWyA95CNaqgPDvZoVrrenXwC3Qi8RaPE",
-            "EViphtcjPLFwW1MwayUdkPWLYKSxnkHsQXohjzG38DT8",
-            "6UcfwQPm1QmcHDd4jneMraRfB1X7DS46uYXUxiZ3xh9n",
+            "AbG3kXTcPA2efou2oK8D7h2KaSxL6JuTR5Rdxry7wMRd",
+            "DMeaHFyFiJMP7VMsyWBkBfvXVHF6S4sPo6nSxa8vp4Zp",
+            "5hsufXko61XrTyqZrUq8e9Fm1MyBGAuQQvzJbqzBBw8J",
+            "AAfttmZQXr5eoG6H5RPrKYLoxGWD2xPps7UxUyWJsRxQ",
+            "HE6Y77Zw3pCrV7mz3rJ5M94L2R5EfCca5Xp1t1NbhS8",
+            "BmajEwG5MBT9o2VSD6jwm3vFvsqTrPYTZu2dEgM2LTCg",
+            "GqynQ2pVanrFFChL3CwJqQE1WUZRemBuE9gAGcn41ULi",
+            "A1ksfZgBeoHq335pL4YZX4Yh5dQysZV3mPogm8edQqeW",
+            "EnELEjztSpTwSkdcD3ytAswttrbZVSnVu49LnvMfGGdz",
+            "7LC5U9pY6UKMx5aTDc5c4RU7jmy9HPdwJk7rm6FYQ5x5",
+            "F697fbPS3qN1D41yYZoH5ntJihcq1srRPfrn5oqwVU3v",
+            "39ap7gnD5cfgyt6i9oPwP97drXqjACQ9QfpYYuAqz5Ge",
+            "8i2tWVhUWf5QA33YB967AvxsPo5RopHg9QkvyFHyK5HS",
+            "4PEJ522LvPDcYJNs1FiQwhszSP5NkFwZ3BqoxkYH7tcC",
+            "AJZQDTiSRPTeyDV6PPGSbfoQqx6bvp8GJFrG97XYRBq6",
+            "3odWCkXvBjm9hFW3bB2bgwhk7PUgDK8gcaDfuqZCPisr",
+            "FPKsjo2sZDU3xSYBMopGQd3KQhn7rYbrBHoBwd16FLDx",
+            "FEcrkLcyAwtartzjsPqV5Nvd3rFNNC3gEVUxLyzMTcMN",
+            "ATSSZvgVuKRfU9ywW6PmzQSpko5XP7LinYHb7Qw7UBT2",
+            "3cnq3w8Pck2WzGJknBp4fzPwNVLJAyBWADyzZXS9RoJa",
+            "4H7oJUMp3UNvrdDURxfzbqPRkryp267X1ChNchLW2FxA",
+            "97Vpgdhh8Nj9m9Uw452AVctUTDmHgzot362z6hSAjvGy",
+            "2HdixLRnxD31GWxZXodivkaBjnTcha4o5yXHJAFbUHQv",
+            "B5T2BL2EiQ5RKjrqBuMwn3WWVtyynVcNvYupfF2quxmo",
+            "5PFNfF3B1cBcXzYPTmZDH4A2s8fHa1Z4uDxCEB8ZG6pv",
+            "BX5yyqzQqfWNRPVPgccWxmP196M2UBP1MuXFrUGufPJE",
+            "CStjaQF81M8Ko8uJbN5zwoqVSGDBsv4enmYYqLtxk2Bg",
+            "96YUSamDwhF6SpVUQqYFSoZPsfpMqva58RqUQKL2E5eM",
+            "ABhE7UfTGz9hpNDXP8wCFMtAvQvYdamfEDoP464WX6YB",
+            "87rnUPcJbbwDK9CCUD6kxpKPJqLH48PYvfcMehk9oUnD",
+            "CLf1PDywcxFhnmwccNsjp3UtLiUbETvd4stYYRWj9gGy",
+            "3eYjqA1UdkRHSFsc6xFWha5rnzhm8srirUXH5oVZdsXP",
+            "FaVyCUoVEXo9VLCpZETscxsmkc43DG1DJzaQdqT4W86r",
+            "AS824GnpEa7jE4LbwdeaTD8swSUREbk8HpwmdJk3Pse",
+            "5srksgNPJyrkRV3NhuCHTZPZzPuYGyjUkzXSpKbph2uG",
+            "HJq6o46m2g2ndjusHpvBRqUXyFafUY6vuTK5z5yhBffn",
+            "3t51wQZCnDvjrDt7a9WFt9WoeVxYGPwUzJM9K5urX9iW",
+            "7hbmdzXsNuc6nrZMrhFxswRURh4sBCpa5QipbwVGxLPA",
+            "FNfWkgK4wAogHF9tUn2mDcbSxEqtTsAVzvyf6CT7MT4o",
+            "12qE1MqVhuQdMym1JGjHjjUw8qGy6a4QFeAPhkfG6Nnk",
+            "GMfJVsKJCFgNpq3BBztbwwxYH2oFQP6MTLbmVARTrnE1",
+            "83XvhMNkLMaZPxd85c81KHZsjJCB85GruAB6ZVCFb3iF",
+            "3keWLMG46HaA9MgDRAjNFzxDzJ7qZsXvsKRBygBMGX8g",
+            "2YCd13wmp6EHNaphDjNq64qqbdXYtSqaUm3gK1bPxung",
+            "7JtqNiSmFPrjr2QfAZ9NXeFvKcXdNp5hrscEJydhkoHe",
+            "r45eY1CsoHct1BHtvBLxXGSDpEaRpcAk3opwhbzGHwP",
+            "DN23octa9vpZFMd1UmVuZRKersqFDQdFn1EMFyxiW2GQ",
+            "7rd6v7DviGgKtGFPNZ6ubD9NY3ensMPLiYYSm3Vw7q4q",
+            "65sEfpShyLoZ84FJ1HRWRdoCdKecNB1QbztXYvooEVZ",
+            "GLqBw3FWzV2MtX5hnVWYwW9ej2z93UtWxxTfpUNS4EZG",
+            "Gk3MTuSkYmVknzZwcuqQSTNHUKWZKPXScw9fGRDGqqam",
+            "5PEKT1MfqVJAhFYUpJMPZ2uZqHKFA13J3hiMgQLxJH62",
+            "GsQkSHieP5DLAgtruXa3joD95C2zc6AGvRSi8WHDwUig",
+            "4SoQAyMNYEwEJ7tgQjqDFYhEgsJfpgRLwZrAPAFuhNRd",
+            "Cxv8UQQhCQVPtp3Z1SeueBqZXtKp9nyJW9g2yHMoNQJD",
+            "7gvfg5w5xFLEoiRh9t1MVZmBJAMPt9Jh1ghyZk4vLBwK",
+            "4awtUzYBY5DNbzVMZ7zP3hMGa2Z4T13bF43muSMwf5Y9",
+            "9vZ7uLrSWbX9MWbUZtCEyqVAdJXEfSQpE2zw9KgSPdw5",
+            "tsneiquW2xnzXbWNqf4xSLtz6j4EKnMKzq1RdLyiZHm",
+            "GdqJYnCwEsW2kqmyegr8kFhd15m1jEAcxpvXW88iTSLF",
+            "BvbKHCXLpyamAQrfZyGuyrdvmUeAXb6KvdrLdEaWma7U",
+            "DTQWEJyv3vPV7T8wGjHE41xXrZceiNxgBTAK45qwPv32",
+            "35fndtNDL31om7Zr7udabBGsbEr9r7bL6bj7fBYkLDZm",
+            "3JRWxWWD747SvzDqRwkZZbBSuNrDUVbThMYcw8ztq2Gv",
         )
 
-        val hex = "38823dd6"
-        val byteArray = hex.hexToByteArray()
-
-        val list = SeedDeriver.invoke(byteArray).map {
-            Base58Encoder.invoke(it.public.toEd25519PublicKeyParameters.encoded)
+        val list = SeedDeriver.invoke(
+            hexSeed.hexToByteArray()
+        ).map {
+            Base58Encoder.invoke(
+                it.public.toEd25519PublicKeyParameters.encoded
+            )
         }
 
         assertArrayEquals(

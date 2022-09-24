@@ -8,7 +8,7 @@ import java.nio.ByteBuffer
 
 class CompactArrayUnitTest {
     @Test
-    fun `1_bytes_is_correct`() {
+    fun `encode_to_1_bytes_is_correct`() {
         evaluateInputs(
             hashMapOf(
                 Pair(0x0000, listOf("0")),
@@ -19,7 +19,7 @@ class CompactArrayUnitTest {
     }
 
     @Test
-    fun `2_bytes_is_correct`() {
+    fun `encode_to_2_bytes_is_correct`() {
         evaluateInputs(
             hashMapOf(
                 Pair(0x0080, listOf("80", "1")),
@@ -29,7 +29,7 @@ class CompactArrayUnitTest {
     }
 
     @Test
-    fun `3_bytes_is_correct`() {
+    fun `encode_to_3_bytes_is_correct`() {
        evaluateInputs(
            hashMapOf(
                Pair(0x4000, listOf("80", "80", "1")),

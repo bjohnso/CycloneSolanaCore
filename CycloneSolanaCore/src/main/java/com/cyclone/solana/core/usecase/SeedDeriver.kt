@@ -18,9 +18,8 @@ object SeedDeriver {
         val entropyLength = seed.size * 8
 
         val entropyBinaryString = seed
-            .toInteger()
             .toBinaryString()
-            .padStart(entropyLength, '0')
+            .padStart(entropyLength)
 
         val entropy = entropyBinaryString.binaryToByteArray()
 
@@ -34,15 +33,20 @@ object SeedDeriver {
             }
         }
 
-        var hmac = BitSet.valueOf(
-            hashSeed(
-                seed = entropy,
-                salt = "mnemonic".toByteArray()
-            )
+        var hmac = hashSeed(
+            seed = entropy,
+            salt = "mnemonic".toByteArray()
         )
 
-        var privateKey = hmac.toBinaryString(0, 255) ?: ""
-        var chainCode = hmac.toBinaryString(256, 511) ?: ""
+        var privateKey = hmac
+            .toBinaryString()
+            .padStart(512, '0')
+            .take(256)
+
+        var chainCode = hmac
+            .toBinaryString()
+            .padStart(512, '0')
+            .takeLast(256)
 
         indices.forEachIndexed { i, item ->
             val index = (2.toDouble().pow(31) + item)
@@ -53,21 +57,25 @@ object SeedDeriver {
             val message = (privateKey + index)
                 .padStart(296, '0')
 
-            hmac = BitSet.valueOf(
-                hashSeed(
-                    seed = message.binaryToByteArray(),
-                    salt = chainCode.binaryToByteArray()
-                )
+            hmac = hashSeed(
+                seed = message.binaryToByteArray(),
+                salt = chainCode.binaryToByteArray()
             )
 
-            val entropy = hmac.toBinaryString(0, 255) ?: ""
+            val entropy = hmac
+                .toBinaryString()
+                .padStart(512, '0')
+                .take(256)
 
             privateKey = deriveChildPrivateKey(
                 childEntropy = entropy,
                 parentKey = chainCode
             )
 
-            chainCode = hmac.toBinaryString(256, 511) ?: ""
+            chainCode = hmac
+                .toBinaryString()
+                .padStart(512, '0')
+                .takeLast(256)
 
             if (i > 1) {
                 val keyPair = getEd25519KeyPairFromPrivateKey(

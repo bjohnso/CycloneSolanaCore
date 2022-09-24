@@ -1,9 +1,5 @@
 package com.cyclone.solana.core.datamodel
 
-import com.cyclone.solana.core.extensions.flatten
-import com.cyclone.solana.core.usecase.Base58Decoder
-import com.cyclone.solana.core.usecase.CompactArrayEncoder
-
 data class Transaction(
     val signatures: List<String>,
     val message: Message
@@ -16,11 +12,7 @@ data class Transaction(
     }
 
     private fun serialiseSignatures(): ByteArray {
-//        return signatures.map {
-//            CompactArrayEncoder.invoke(
-//                Base58Decoder.invoke(it)
-//            )
-//        }.flatten()
+        // TODO: SERIALISE SIGNATURES
         return ByteArray(0)
     }
 

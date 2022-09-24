@@ -1,16 +1,10 @@
 package com.cyclone.solana.core
 
-import com.cyclone.solana.core.constants.Mnemonic
 import com.cyclone.solana.core.extensions.*
 import com.cyclone.solana.core.usecase.MnemonicDecoder
 import com.cyclone.solana.core.usecase.MnemonicEncoder
-import com.cyclone.solana.core.util.ExceptionUtil
-import com.cyclone.solana.core.util.Log
 import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.math.BigInteger
-import java.security.MessageDigest
 
 class MnemonicUnitTest {
 

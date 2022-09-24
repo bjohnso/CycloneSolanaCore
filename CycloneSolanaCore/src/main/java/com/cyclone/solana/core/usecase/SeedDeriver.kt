@@ -2,12 +2,10 @@ package com.cyclone.solana.core.usecase
 
 import com.cyclone.solana.core.extensions.binaryToByteArray
 import com.cyclone.solana.core.extensions.toBinaryString
-import com.cyclone.solana.core.extensions.toInteger
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.util.*
 import kotlin.math.pow
 
 object SeedDeriver {

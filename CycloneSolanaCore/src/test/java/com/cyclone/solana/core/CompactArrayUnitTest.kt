@@ -1,5 +1,7 @@
 package com.cyclone.solana.core
 
+import com.cyclone.solana.core.extensions.flatten
+import com.cyclone.solana.core.extensions.hexToByteArray
 import com.cyclone.solana.core.usecase.CompactArrayEncoder
 import org.junit.Test
 
@@ -41,7 +43,9 @@ class CompactArrayUnitTest {
 
     private fun evaluateInputs(inputs: HashMap<Int, List<String>>) {
         for (input in inputs) {
-            val expected = input.value
+            val expected = input.value.map {
+                it.hexToByteArray()
+            }.flatten()
 
             val bytes = ByteBuffer
                 .allocate(Int.SIZE_BYTES)

@@ -2,11 +2,11 @@ package com.cyclone.solana.core.datamodel
 
 data class TransferInstruction(
     override val programIdIndex: Int,
-    override val accountAddressIndices: List<Int>,
+    override val accountIndices: List<Int>,
     override val data: ByteArray
 ): Instruction(
     programIdIndex = programIdIndex,
-    accountAddressIndices = accountAddressIndices,
+    accountIndices = accountIndices,
     data = data
 ) {
     override fun equals(other: Any?): Boolean {
@@ -16,7 +16,7 @@ data class TransferInstruction(
         other as TransferInstruction
 
         if (programIdIndex != other.programIdIndex) return false
-        if (accountAddressIndices != other.accountAddressIndices) return false
+        if (accountIndices != other.accountIndices) return false
         if (!data.contentEquals(other.data)) return false
 
         return true
@@ -24,7 +24,7 @@ data class TransferInstruction(
 
     override fun hashCode(): Int {
         var result = programIdIndex
-        result = 31 * result + accountAddressIndices.hashCode()
+        result = 31 * result + accountIndices.hashCode()
         result = 31 * result + data.contentHashCode()
         return result
     }

@@ -1,11 +1,9 @@
 package com.cyclone.solana.core.usecase
 
-import com.cyclone.solana.core.extensions.binaryToHex
-import com.cyclone.solana.core.extensions.toBinaryString
-import com.cyclone.solana.core.extensions.toInteger
+import com.cyclone.solana.core.extensions.*
 
 object CompactArrayEncoder {
-    operator fun invoke(byteArray: ByteArray): List<String> {
+    operator fun invoke(byteArray: ByteArray): ByteArray {
         val firstByteThreshold = 0x7f
         val secondByteThreshold = 0x3fff
 
@@ -18,27 +16,27 @@ object CompactArrayEncoder {
             number > secondByteThreshold -> {
                 listOf(
                     "1${binaryString.slice(9 until 16)}"
-                        .binaryToHex(),
+                        .binaryToByteArray(),
                     "1${binaryString.slice(2 until 9)}"
-                        .binaryToHex(),
+                        .binaryToByteArray(),
                     "0${binaryString.slice(0 until 2)}"
-                        .binaryToHex(),
+                        .binaryToByteArray(),
                 )
             }
             number > firstByteThreshold -> {
                 listOf(
                     "1${binaryString.slice(9 until 16)}"
-                        .binaryToHex(),
+                        .binaryToByteArray(),
                     "0${binaryString.slice(2 until 9)}"
-                        .binaryToHex(),
+                        .binaryToByteArray(),
                 )
             }
             else -> {
                 listOf(
                     "0${binaryString.slice(9 until 16)}"
-                        .binaryToHex(),
+                        .binaryToByteArray(),
                 )
             }
-        }
+        }.flatten()
     }
 }

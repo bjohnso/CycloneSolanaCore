@@ -47,12 +47,7 @@ class CompactArrayUnitTest {
                 it.hexToByteArray()
             }.flatten()
 
-            val bytes = ByteBuffer
-                .allocate(Int.SIZE_BYTES)
-                .putInt(input.key)
-                .array()
-
-            val result = CompactArrayEncoder.invoke(bytes)
+            val result = CompactArrayEncoder.invoke(input.key)
 
             assertArrayEquals(
                 expected.toTypedArray(),

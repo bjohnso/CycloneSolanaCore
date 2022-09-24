@@ -1,10 +1,8 @@
 package com.cyclone.solana.core.usecase
 
 import com.cyclone.solana.core.constants.Address
-import com.cyclone.solana.core.datamodel.Header
-import com.cyclone.solana.core.datamodel.Message
-import com.cyclone.solana.core.datamodel.Transaction
-import com.cyclone.solana.core.datamodel.TransferInstruction
+import com.cyclone.solana.core.constants.SystemProgram
+import com.cyclone.solana.core.datamodel.*
 import java.math.BigInteger
 
 object SolTransfer {
@@ -16,22 +14,22 @@ object SolTransfer {
     ): Transaction {
         val header = Header(
             noSigs = 1,
-            noSignedReadOnlyAccounts = 1,
-            noUnsignedReadOnlyAccounts = 0
+            noSignedReadOnlyAccounts = 0,
+            noUnsignedReadOnlyAccounts = 1
         )
 
         val instruction = TransferInstruction(
-            programIdIndex = 2,
-            accountIndices = listOf(1, 2),
-            data = BigInteger.valueOf(lamports.toLong()).toByteArray()
+            programIdIndex = SystemProgram.TRANSFER,
+            accountIndices = listOf(0, 1),
+            data = TransferInstructionData(lamports = lamports)
         )
 
         val message = Message(
             header = header,
             accountAddresses = listOf(
-                Address.SYSTEM_PROGRAM,
                 fromAddress,
-                toAddress
+                toAddress,
+                Address.SYSTEM_PROGRAM,
             ),
             blockhash = blockhash,
             instructions = listOf(instruction)

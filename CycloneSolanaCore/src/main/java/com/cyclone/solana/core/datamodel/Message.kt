@@ -24,11 +24,15 @@ data class Message(
     }
 
     private fun serialiseAccountAddresses(): ByteArray {
-        return accountAddresses.map {
-            CompactArrayEncoder.invoke(
-                Base58Decoder.invoke(it)
-            )
-        }.flatten()
+        val compactU16 = CompactArrayEncoder.invoke(
+            accountAddresses.size
+        )
+
+        val items = accountAddresses
+            .map { Base58Decoder.invoke(it) }
+            .flatten()
+
+        return compactU16 + items
     }
 
     private fun serialiseBlockHash(): ByteArray {
@@ -36,8 +40,14 @@ data class Message(
     }
 
     private fun serialiseInstructions(): ByteArray {
-        return instructions.map {
+        val compactU16 = CompactArrayEncoder.invoke(
+            instructions.size
+        )
+
+        val items = instructions.map {
             it.serialise()
         }.flatten()
+
+        return compactU16 + items
     }
 }

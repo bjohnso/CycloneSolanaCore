@@ -16,11 +16,12 @@ data class Transaction(
     }
 
     private fun serialiseSignatures(): ByteArray {
-        return signatures.map {
-            CompactArrayEncoder.invoke(
-                Base58Decoder.invoke(it)
-            )
-        }.flatten()
+//        return signatures.map {
+//            CompactArrayEncoder.invoke(
+//                Base58Decoder.invoke(it)
+//            )
+//        }.flatten()
+        return ByteArray(0)
     }
 
     private fun serialiseMessage(): ByteArray {

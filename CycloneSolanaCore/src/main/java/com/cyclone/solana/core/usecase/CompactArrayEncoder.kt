@@ -3,11 +3,10 @@ package com.cyclone.solana.core.usecase
 import com.cyclone.solana.core.extensions.*
 
 object CompactArrayEncoder {
-    operator fun invoke(byteArray: ByteArray): ByteArray {
+    operator fun invoke(number: Int): ByteArray {
         val firstByteThreshold = 0x7f
         val secondByteThreshold = 0x3fff
 
-        val number = byteArray.toInteger()
         val binaryString = number.toBinaryString()
             .takeLast(16)
             .padStart(16, '0')

@@ -11,7 +11,7 @@ class SeedDeriverUnitTest {
     fun derived_key_pairs_are_correct() {
         val hexSeed = "b35cd271ce77c440d5aac7fd591403e3"
         
-        val expected = listOf(
+        val expectedPublicKeys = listOf(
             "AbG3kXTcPA2efou2oK8D7h2KaSxL6JuTR5Rdxry7wMRd",
             "DMeaHFyFiJMP7VMsyWBkBfvXVHF6S4sPo6nSxa8vp4Zp",
             "5hsufXko61XrTyqZrUq8e9Fm1MyBGAuQQvzJbqzBBw8J",
@@ -77,18 +77,98 @@ class SeedDeriverUnitTest {
             "35fndtNDL31om7Zr7udabBGsbEr9r7bL6bj7fBYkLDZm",
             "3JRWxWWD747SvzDqRwkZZbBSuNrDUVbThMYcw8ztq2Gv",
         )
+        
+        val expectedPrivateKeys = listOf(
+            "tyXdkqXyMPrz62TTGfn3YnZJCjNDbwQMxSp66uRabsh",
+            "YgJyp9XFrKG4QsG9TrsgHXzxV6TxFM5Bs4gBChPRVDm",
+            "KQTbWpQ9UrbEKTSsMFz9e8ksXHnw7Dxd6fJ2NaZjZrm",
+            "ScZ3ipDgk6JG7J69ewr7RVkMwGZoVHeBiRnfm5VDYpZ",
+            "LGRhskdPLvCdAPB677bURUAhffoRzP2FbA2PqXmyL1P",
+            "LgjhQrnP1iyuQWZfYcKbtoXQhpx5Ngu1Fhqmhk1Mibg",
+            "vqZQLZn6gmBuSqHLDGGPSU5s9WFbkb9bVGb96SQySp4",
+            "6zAmckWnDSummdZgcwnUwbAyVRhaijEv4CXULaR4igG",
+            "Q372ffkjQ3RX5qCBcZb4QKz5eJgvcLei4Dv8a49uDZc",
+            "DtuiSyT8bMbFA8PAWmdHXoxv7YdT4JTViLoCvHDm6c6",
+            "ac7KDc6APCmPvqtXqhxYh79DVBX9ZStFt5jv77GALv8",
+            "F1MbetfCtR7LperoWJVti2sgZSJPZ8EG2AtJjQ7WfGZ",
+            "yHujUT44BVTCCj3AJksryzMm4rwzQtpJsYVTP9cwxuT",
+            "PqkD1F61g8YrEXDuZ1JWSZiyPGYydYLHtGVCReP4kuY",
+            "mPqDbZTUYyguvveq3si1S6wQTt3P8QzGixwZBUK7H4C",
+            "UqmSXssLmSPRgodvEaJrtDuRxsLCw9dGXxTRwd7moTv",
+            "9nyxsLHEL9hA2PPnNJsf1iTkWCumK7cUMmD7iztfqoh",
+            "iqZJqmnxzSr99xqnNhCpCQ5LfHEgBLbBfvGWe5mxdJx",
+            "98a9xHmgUEgk3JEcmXFWQhaDHjouXAnCwAjxTZDdX5V",
+            "vajbKjYzyc59vZg16nCSjjZ5fQEpxCpSoV5jhUA6V4L",
+            "r9WmDfdEhALERkA8rZa8N9x76GGLzno76dW5fUPvCSX",
+            "zXmchbcP64QpQtGgDFPhJUKrhtNRiLQtkvTac8P4jBN",
+            "cvLu6YLjtgFXPkzd4xM5QMeB1Rswbw6ak3QLTtCVLR1",
+            "872Js5jcHMUcZSr1ANGLSaepdyt7wUhJLFpvLGxnzoD",
+            "bdhVhtJpa9tD56jLDimsFb4uSpzTmyUoGwtfmKwEnmP",
+            "e7PTSqi4585cvWv6y4qdJUMCkGR5JB5rfrq4pE8yEv9",
+            "13x5JTZ6DrVKqkdjBYqm9SPscDBqJRBr1jEK6LSGgMyU",
+            "qMDqrVyX5e5JLsWkTL8odBoCgM2Zr8k3ZMT8JphJDsE",
+            "Z7XvS26j4xVGajfjVzRWEkof58RV1CQSjJAJi4LUDM5",
+            "irrvERRMyNFRBskCZnt4AAgzByHoEe7RaNSvbksnsQR",
+            "hVi5UVApiCL5tpojBErjTc6ahSKo27x1s4fVJfq6jG2",
+            "7GzRoQJFBZ2pJHT6oxyV8Hhxv8RzMaF4CVBUSCTet2y",
+            "ZFu53GV4pJNUf4vu8rQUBMN5d1us6fcxci2LmDjo779",
+            "aCges4rbStCccY259GUWSwXrxJLJzr4vJcw9wMXkxje",
+            "gKRVqLU5Wb6WvKU3YMZ8xDjbjPgB1p1ycGzBPmQptBA",
+            "p6uB7qTtspKygZmTcS2N5S3sctQqT6kq6JGQZmbxd4m",
+            "H9kmFS5vCDe76vmBfCCaKYH3kK1ENm4cbBSjxaKP6mt",
+            "6X4u91HfHt5nqGmWN1qSPjKw4KstUTzg5ph2y51XvX8",
+            "qkMKmRxeu6JmLEA27ZdD1CwVo4oH7dtUZ4igJXvj7f2",
+            "tmfRMiWLt3vDZz9prJUfjrpT488yEHrS5P3Y1QrbSZW",
+            "mexzZXz6jrwQCSiUnb3JAQjRdNuzmtCZAghdUq93aNQ",
+            "zXxhX4vXRztTSk11djMSAotixpDCFoTduzS6LrnMyCU",
+            "jEw6fJ9hBznUmqtzUoo9WTFLfNvAZVVHKrSfJTQrARt",
+            "J4Sbnfqmec6mSdqUmYcUdcdwAdNeZdovSYia7hokmdz",
+            "gGzDcXTjzKoKu6S7FeV4yJvWBpTLh9gqokcWHgEgU6u",
+            "GY5ZnSNdTbMrm8NDSrYj7rgbevfEcD7x3H6uRRXh2J5",
+            "ZM5a5hUbShzRMGMbLHLPSeFDMK9EawCU1n4VmEeksg9",
+            "K1tSfXVV5whPShGSGvmK5rZRyXLzzJarHk8WwBZScch",
+            "AEcD9bxNqNVsZLGHN59fGawRbTr2YwM6RrDKTNGczsR",
+            "12uoCSpmTRJnpDjCGCW5Y3a6iC5yaBRFP4KQ8CsBjF3u",
+            "RaR7HZW9Qyix3bRrnBj8iXFVmzwnn1Q9N2McYCANo2x",
+            "21NNZWp5a1SUgmiwpN7N5NehELtPaQ95dkKeNYg2vJNm",
+            "6ufiPr2LR625RU1Pk82BS81oPPhJGe2qU8LCMGpmjQ4",
+            "NNQr38csQFcTYz2yjpx9E6cbaMjqcRN4pZWTWLdzwmV",
+            "12LmfHaZJLp2y5Vpcpgvo898rrwji5MxdLZunDviXg8h",
+            "24TxjpkYHEooeYVmg3YuA1Eo5kdKFPwtX4HYqD2EJhxx",
+            "12wmQjXwG1poimo6w4DNhvQGxweDTKcMsQY7F7RgKo8v",
+            "24tBiUy166SRVjoCRAyJNh8JVY37FR14Y9VVRV9mXrDK",
+            "RpRVKzb3BFgQikw8oiBFfTfTYDEuPqoaHDDVKFW7PST",
+            "6GyciEvMgxUDNR39AFPmkaYU6b8FSqvYFGSYqTmM9Er",
+            "Hy2i5KNJycyvCQaUnuCJe3FQTHWKKwcsgnxsZk1qdop",
+            "aSAUXsEhPPVcENMwcXkmz7xpHv4WWd2tKg9mxMNvxx3",
+            "NMhU1UwJDHvKEntbPc2BtP6ZJngHvXd2TCh2k9uvrRw",
+            "6vn3aboKDvZVijCycgpKgYvgon6Wuf1MGHkTYrV5iXg",
+        )
 
         val list = SeedDeriver.invoke(
             hexSeed.hexToByteArray()
-        ).map {
+        )
+
+        val resultPublicKeys = list.map {
             Base58Encoder.invoke(
                 it.public.toEd25519PublicKeyParameters.encoded
             )
         }
 
+        val resultPrivateKeys = list.map {
+            Base58Encoder.invoke(
+                it.private.toEd25519PrivateKeyKeyParameters.encoded
+            )
+        }
+
         assertArrayEquals(
-            expected.toTypedArray(),
-            list.toTypedArray()
+            expectedPublicKeys.toTypedArray(),
+            resultPublicKeys.toTypedArray()
+        )
+
+        assertArrayEquals(
+            expectedPrivateKeys.toTypedArray(),
+            resultPrivateKeys.toTypedArray()
         )
     }
 }

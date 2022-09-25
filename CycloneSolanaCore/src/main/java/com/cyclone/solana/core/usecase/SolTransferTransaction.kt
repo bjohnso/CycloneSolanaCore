@@ -3,9 +3,8 @@ package com.cyclone.solana.core.usecase
 import com.cyclone.solana.core.constants.Address
 import com.cyclone.solana.core.constants.SystemProgram
 import com.cyclone.solana.core.datamodel.*
-import java.math.BigInteger
 
-object SolTransfer {
+object SolTransferTransaction {
     operator fun invoke(
         fromAddress: String,
         toAddress: String,
@@ -36,7 +35,6 @@ object SolTransfer {
         )
 
         return Transaction(
-            signatures = listOf(),
             message = message
         )
     }

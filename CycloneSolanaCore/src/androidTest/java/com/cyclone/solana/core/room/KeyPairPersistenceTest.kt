@@ -160,13 +160,13 @@ class KeyPairPersistenceTest: BaseRoomTest() {
             )
         }
 
-        database.keyPairDao().persistKeyPairs(*inputKeyPairs.toTypedArray())
+        database.keyPairDao().saveKeyPairs(*inputKeyPairs.toTypedArray())
 
         var retrievedKeyPairs = listOf<KeyPair>()
 
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            retrievedKeyPairs = database.keyPairDao().retrieveAllKeyPairs()
+            retrievedKeyPairs = database.keyPairDao().getAllKeyPairs()
             latch.countDown()
         }
 
@@ -175,6 +175,54 @@ class KeyPairPersistenceTest: BaseRoomTest() {
 
         assertArrayEquals(
             inputKeyPairs.toTypedArray(),
+            retrievedKeyPairs.toTypedArray()
+        )
+    }
+
+    @Test
+    fun persisted_keypairs_are_deleted() = runBlocking {
+        val inputKeyPairs = expectedPublicKeys.mapIndexed { index, key ->
+            KeyPair(
+                key,
+                Base58Decoder.invoke(
+                    expectedPrivateKeys[index]
+                )
+            )
+        }
+
+        database.keyPairDao().saveKeyPairs(*inputKeyPairs.toTypedArray())
+
+        var retrievedKeyPairs = listOf<KeyPair>()
+
+        val saveLatch = CountDownLatch(1)
+        val saveJob = async(Dispatchers.IO) {
+            retrievedKeyPairs = database.keyPairDao().getAllKeyPairs()
+            saveLatch.countDown()
+        }
+
+        saveLatch.await()
+        saveJob.cancelAndJoin()
+
+        assertArrayEquals(
+            inputKeyPairs.toTypedArray(),
+            retrievedKeyPairs.toTypedArray()
+        )
+
+        database.keyPairDao().deleteAllKeyPairs()
+
+        retrievedKeyPairs = listOf()
+
+        val deleteLatch = CountDownLatch(1)
+        val deleteJob = async(Dispatchers.IO) {
+            retrievedKeyPairs = database.keyPairDao().getAllKeyPairs()
+            deleteLatch.countDown()
+        }
+
+        deleteLatch.await()
+        deleteJob.cancelAndJoin()
+
+        assertArrayEquals(
+            listOf<KeyPair>().toTypedArray(),
             retrievedKeyPairs.toTypedArray()
         )
     }

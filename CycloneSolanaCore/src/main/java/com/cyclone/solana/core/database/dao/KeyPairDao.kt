@@ -6,20 +6,20 @@ import com.cyclone.solana.core.datamodel.entity.KeyPair
 @Dao
 interface KeyPairDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun persistKeyPairs(vararg keyPair: KeyPair)
+    fun saveKeyPairs(vararg keyPair: KeyPair)
 
     @Transaction
     @Query("select * from tbl_keypairs where public_key = :publicKey limit 1")
-    fun retrieveKeyPair(publicKey: String): KeyPair?
+    fun getKeyPair(publicKey: String): KeyPair?
 
     @Transaction
     @Query("select * from tbl_keypairs")
-    fun retrieveAllKeyPairs(): List<KeyPair>
+    fun getAllKeyPairs(): List<KeyPair>
 
     @Delete
-    fun destroyKeyPairs(vararg keyPair: KeyPair)
+    fun deleteKeyPairs(vararg keyPair: KeyPair)
 
     @Transaction
     @Query("delete from tbl_keypairs")
-    fun destroyAllKeyPairs()
+    fun deleteAllKeyPairs()
 }

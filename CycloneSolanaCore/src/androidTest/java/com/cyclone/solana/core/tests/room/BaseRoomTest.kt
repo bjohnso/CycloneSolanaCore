@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.room
+package com.cyclone.solana.core.tests.room
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider

@@ -1,4 +1,6 @@
-package com.cyclone.solana.core.datamodel.dto
+package com.cyclone.solana.core.datamodel.dto.crypto
+
+import com.cyclone.solana.core.datamodel.interfaces.crypto.InstructionData
 
 data class TransferInstruction(
     override val programIdIndex: Int,

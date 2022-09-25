@@ -27,7 +27,7 @@ object MnemonicEncoder {
             .chunked(11)
             .map {
                 val index = BigInteger(it, 2).toInt()
-                Mnemonic.words[index]
+                Mnemonic.Words.WORDS[index]
             }
     }
 

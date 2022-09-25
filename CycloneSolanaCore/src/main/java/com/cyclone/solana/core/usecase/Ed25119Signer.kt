@@ -17,7 +17,7 @@ object Ed25119Signer {
         signer.update(message, 0, message.size)
         val signature = signer.generateSignature()
 
-        assert(signature.size == Signing.SIGNATURE_LENGTH_BYTES) {
+        assert(signature.size == Signing.LENGTHS.SIGNATURE_LENGTH_BYTES) {
             "Signature length must be 64 bytes"
         }
 

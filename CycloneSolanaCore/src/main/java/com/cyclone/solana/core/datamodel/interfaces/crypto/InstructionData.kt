@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.datamodel.dto
+package com.cyclone.solana.core.datamodel.interfaces.crypto
 
 interface InstructionData {
     fun serialise(): ByteArray

@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.room
+package com.cyclone.solana.core.tests.room
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.cyclone.solana.core.datamodel.entity.KeyPair

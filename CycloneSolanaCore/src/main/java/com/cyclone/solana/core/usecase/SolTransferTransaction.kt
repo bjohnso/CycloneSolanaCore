@@ -2,7 +2,7 @@ package com.cyclone.solana.core.usecase
 
 import com.cyclone.solana.core.constants.Address
 import com.cyclone.solana.core.constants.SystemProgram
-import com.cyclone.solana.core.datamodel.dto.*
+import com.cyclone.solana.core.datamodel.dto.crypto.*
 
 object SolTransferTransaction {
     operator fun invoke(
@@ -18,7 +18,7 @@ object SolTransferTransaction {
         )
 
         val instruction = TransferInstruction(
-            programIdIndex = SystemProgram.TRANSFER,
+            programIdIndex = SystemProgram.Enums.TRANSFER,
             accountIndices = listOf(0, 1),
             data = TransferInstructionData(lamports = lamports)
         )
@@ -28,7 +28,7 @@ object SolTransferTransaction {
             accountAddresses = listOf(
                 fromAddress,
                 toAddress,
-                Address.SYSTEM_PROGRAM,
+                Address.ProgramAddresses.SYSTEM_PROGRAM,
             ),
             blockhash = blockhash,
             instructions = listOf(instruction)

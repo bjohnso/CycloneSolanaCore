@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.datamodel.dto
+package com.cyclone.solana.core.datamodel.dto.crypto
 
 data class Header(
     val noSigs: Int,

@@ -9,7 +9,7 @@ import java.security.MessageDigest
 
 object MnemonicDecoder {
     operator fun invoke(mnemonicList: List<String>): ByteArray? {
-        val mnemonicWordList = Mnemonic.words
+        val mnemonicWordList = Mnemonic.Words.WORDS
 
         val mnemonicBitLength = mnemonicList.size * 11
         val entropyLength = (mnemonicBitLength * 32) / 33

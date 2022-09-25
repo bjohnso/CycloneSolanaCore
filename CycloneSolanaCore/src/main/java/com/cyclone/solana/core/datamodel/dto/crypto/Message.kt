@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.datamodel.dto
+package com.cyclone.solana.core.datamodel.dto.crypto
 
 import com.cyclone.solana.core.extensions.flatten
 import com.cyclone.solana.core.usecase.Base58Decoder

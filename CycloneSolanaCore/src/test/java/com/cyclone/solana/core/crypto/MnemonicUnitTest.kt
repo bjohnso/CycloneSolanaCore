@@ -1,4 +1,4 @@
-package com.cyclone.solana.core
+package com.cyclone.solana.core.crypto
 
 import com.cyclone.solana.core.extensions.*
 import com.cyclone.solana.core.usecase.MnemonicDecoder
@@ -9,7 +9,7 @@ import org.junit.Test
 class MnemonicUnitTest {
 
     @Test
-    fun `encode_to_12_word_mnemonic_is_correct`() {
+    fun encode_to_12_word_mnemonic_is_correct() {
         val hexSeed = "b35cd271ce77c440d5aac7fd591403e3"
 
         val expected = listOf(
@@ -38,7 +38,7 @@ class MnemonicUnitTest {
     }
 
     @Test
-    fun `decode_from_12_word_mnemonic_is_correct`() {
+    fun decode_from_12_word_mnemonic_is_correct() {
         val expected = "b35cd271ce77c440d5aac7fd591403e3".hexToByteArray()
 
         val result = MnemonicDecoder.invoke(

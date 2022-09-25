@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.datamodel
+package com.cyclone.solana.core.datamodel.dto
 
 import com.cyclone.solana.core.extensions.toByteArray
 import com.cyclone.solana.core.usecase.CompactArrayEncoder

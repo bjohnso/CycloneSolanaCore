@@ -1,4 +1,4 @@
-package com.cyclone.solana.core
+package com.cyclone.solana.core.crypto
 
 import com.cyclone.solana.core.extensions.*
 import com.cyclone.solana.core.usecase.Base58Encoder
@@ -8,7 +8,7 @@ import org.junit.Test
 
 class SeedDeriverUnitTest {
     @Test
-    fun `derived_key_pairs_are_correct`() {
+    fun derived_key_pairs_are_correct() {
         val hexSeed = "b35cd271ce77c440d5aac7fd591403e3"
         
         val expected = listOf(

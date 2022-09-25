@@ -1,4 +1,4 @@
-package com.cyclone.solana.core
+package com.cyclone.solana.core.crypto
 
 import com.cyclone.solana.core.extensions.flatten
 import com.cyclone.solana.core.extensions.hexToByteArray
@@ -6,11 +6,10 @@ import com.cyclone.solana.core.usecase.CompactArrayEncoder
 import org.junit.Test
 
 import org.junit.Assert.*
-import java.nio.ByteBuffer
 
 class CompactArrayUnitTest {
     @Test
-    fun `encode_to_1_bytes_is_correct`() {
+    fun encode_to_1_bytes_is_correct() {
         evaluateInputs(
             hashMapOf(
                 Pair(0x0000, listOf("0")),
@@ -21,7 +20,7 @@ class CompactArrayUnitTest {
     }
 
     @Test
-    fun `encode_to_2_bytes_is_correct`() {
+    fun encode_to_2_bytes_is_correct() {
         evaluateInputs(
             hashMapOf(
                 Pair(0x0080, listOf("80", "1")),
@@ -31,7 +30,7 @@ class CompactArrayUnitTest {
     }
 
     @Test
-    fun `encode_to_3_bytes_is_correct`() {
+    fun encode_to_3_bytes_is_correct() {
        evaluateInputs(
            hashMapOf(
                Pair(0x4000, listOf("80", "80", "1")),

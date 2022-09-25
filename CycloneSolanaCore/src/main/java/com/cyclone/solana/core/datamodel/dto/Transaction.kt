@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.datamodel
+package com.cyclone.solana.core.datamodel.dto
 
 import com.cyclone.solana.core.usecase.CompactArrayEncoder
 import com.cyclone.solana.core.usecase.Ed25119Signer

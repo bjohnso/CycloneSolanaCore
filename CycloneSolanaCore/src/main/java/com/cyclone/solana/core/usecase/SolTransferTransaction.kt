@@ -2,7 +2,7 @@ package com.cyclone.solana.core.usecase
 
 import com.cyclone.solana.core.constants.Address
 import com.cyclone.solana.core.constants.SystemProgram
-import com.cyclone.solana.core.datamodel.*
+import com.cyclone.solana.core.datamodel.dto.*
 
 object SolTransferTransaction {
     operator fun invoke(

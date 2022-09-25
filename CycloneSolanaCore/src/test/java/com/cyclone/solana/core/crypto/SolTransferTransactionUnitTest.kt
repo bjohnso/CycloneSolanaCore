@@ -1,4 +1,4 @@
-package com.cyclone.solana.core
+package com.cyclone.solana.core.crypto
 
 import com.cyclone.solana.core.constants.Units
 import com.cyclone.solana.core.usecase.Base58Decoder
@@ -11,7 +11,7 @@ import org.junit.Test
 
 class SolTransferTransactionUnitTest {
     @Test
-    fun `sol_transfer_transaction_is_correct`() {
+    fun sol_transfer_transaction_is_correct() {
         val expectedUnsigned = Base58Decoder.invoke(
             "87PYuLJkbJfgFnkDWHsaURDReR7xSajZCnNdUEXtPTPmsxGFzLqN9NvGWVK8QxgCEsgp7QtMiAHGgHfVP5h4K4uhpUyZwBoZaV12jAunHwT3Wi9MBG9kUE1NHEQJceUCTvPNsJqAGi6emQ3KPKgNwYQ4kP3ob9YRDjQF83nGmKW9KdZzKP3H36nyY4DYYFD4tXenZA6iHP7V"
         )
@@ -35,7 +35,7 @@ class SolTransferTransactionUnitTest {
     }
 
     @Test
-    fun `signed_sol_transfer_transaction_correct`() {
+    fun signed_sol_transfer_transaction_correct() {
         val expectedSigned = Base58Decoder.invoke(
             "4q6hftAxkbmYue47iaGbyAepZwSXxWut83hwnMkQjgFYCb6n6z58rNKt4V4Gv6cLw5c5qQR9j3DH5xYgWYpbfVZEA6CpvP6zm8FeanzQaVURU2wtgpoxbArnzSf1h6ZU5yXx1pt566eud5RE5SnYoxmMQGbPVq4J4pyec851vNRAukrtgrPAohjQhz7i4vEaUfVDKNi5cTM9TxXM7atRGxBJcxK5Txugh2Zi5eSR7UqUAMHb9FPqjroiDVEhkQMDKsBu7ZxdyyH8qhtnToz3SkJfThPCsHh5fb9y1"
         )

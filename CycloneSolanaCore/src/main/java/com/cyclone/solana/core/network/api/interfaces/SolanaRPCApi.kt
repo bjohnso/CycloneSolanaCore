@@ -10,15 +10,15 @@ interface SolanaRPCApi {
     @POST("/")
     suspend fun getBalance(
         @Body body: RPCRequest
-    ): Response<RPCResponse>
+    ): Response<RPCResponse.Response>
 
     @POST("/")
     suspend fun getLatestBlockhash(
         @Body body: RPCRequest
-    ): Response<RPCResponse>
+    ): Response<RPCResponse.Response>
 
     @POST("/")
     suspend fun transferLamports(
         @Body body: RPCRequest
-    ): Response<RPCResponse>
+    ): Response<RPCResponse.Response>
 }

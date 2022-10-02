@@ -12,7 +12,11 @@ interface NetworkBoundResourceProvider<ResultType : Any, ErrorType: Any> {
     suspend fun loadFromNetwork(): Response<*>
 
     @WorkerThread
-    suspend fun parseNetworkResult(response: Response<*>?): ResultType
+    suspend fun parseNetworkResult(response: Response<*>?): ResultType?
+
+    suspend fun isError(response: Response<*>?): Boolean {
+        return response?.isSuccessful == true
+    }
 
     @WorkerThread
     fun loadFromCache(): Flow<ResultType>? {
@@ -50,15 +54,13 @@ interface NetworkBoundResourceProvider<ResultType : Any, ErrorType: Any> {
             emit(NetworkResource.Loading)
             val networkData = loadFromNetwork()
 
-            if (networkData.isSuccessful) {
-                try {
-                    parseNetworkResult(networkData).also {
-                        cacheNetworkResult(it)
-                        emit(NetworkResource.Success(it))
-                    }
-                } catch (ignore: Exception) {}
-
-                return@flow
+            if (!isError(networkData)) {
+                val parsed = parseNetworkResult(networkData)
+                if (parsed != null) {
+                    cacheNetworkResult(parsed)
+                    emit(NetworkResource.Success(parsed))
+                    return@flow
+                }
             }
 
             emit(NetworkResource.Error(onError(networkData)))

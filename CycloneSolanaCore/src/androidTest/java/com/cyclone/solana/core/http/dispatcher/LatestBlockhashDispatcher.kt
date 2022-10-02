@@ -25,23 +25,32 @@ object LatestBlockhashDispatcher: MockDispatcher {
                                 )
                             )
                     }
-                    RPC.RPCMethods.GET_BALANCE -> {
-                        MockResponse()
-                            .setResponseCode(200).setBody("")
-                    }
-                    RPC.RPCMethods.SEND_TRANSACTION -> {
-                        MockResponse()
-                            .setResponseCode(200).setBody("")
-                    }
-                    else -> {
-                        MockResponse().setResponseCode(200).setBody("")
-                    }
+                    else -> MockResponse().setResponseCode(200).setBody("")
                 }
             }
         }
     }
 
     override fun getErrorResponse(): Dispatcher {
-        TODO("getErrorResponse Not Implemented")
+        return object: Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                val body = JSONObject(
+                    request.body.readUtf8()
+                )
+
+                return when (body.getString("method")) {
+                    RPC.RPCMethods.GET_LATEST_BLOCKHASH -> {
+                        MockResponse()
+                            .setResponseCode(200)
+                            .setBody(
+                                FileReader.instance.readJsonFile(
+                                    FileReader.FileResource.getLatestBlockHashError
+                                )
+                            )
+                    }
+                    else -> MockResponse().setResponseCode(200).setBody("")
+                }
+            }
+        }
     }
 }

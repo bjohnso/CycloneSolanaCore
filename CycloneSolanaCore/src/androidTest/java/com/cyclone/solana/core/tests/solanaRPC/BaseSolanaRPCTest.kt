@@ -47,15 +47,6 @@ open class BaseSolanaRPCTest {
             .addTrustedCertificate(rootCertificate.certificate)
             .build()
 
-        val httpClient: OkHttpClient = OkHttpClient.Builder()
-            .sslSocketFactory(
-                clientCertificates.sslSocketFactory(),
-                clientCertificates.trustManager
-            )
-            .connectTimeout(HttpClient.TIMEOUT_CONNECT.toLong(), TimeUnit.SECONDS)
-            .readTimeout(HttpClient.TIMEOUT_READ.toLong(), TimeUnit.SECONDS)
-            .build()
-
         mockWebServer = MockWebServer()
         mockWebServer.useHttps(
             serverHandshakeCertificates.sslSocketFactory(),
@@ -66,7 +57,12 @@ open class BaseSolanaRPCTest {
         solanaRPCApi = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(mockWebServer.url("/").toString())
-            .client(httpClient)
+            .client(
+                HttpClient.getOkHttpClient(
+                    clientCertificates.sslSocketFactory(),
+                    clientCertificates.trustManager
+                )
+            )
             .build()
             .create(SolanaRPCApi::class.java)
 

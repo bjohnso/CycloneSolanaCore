@@ -23,4 +23,9 @@ interface SolanaRPCApi {
     suspend fun sendTransaction(
         @Body body: RPCRequest
     ): Response<RPCResponse.Response>
+
+    @POST("/")
+    suspend fun getTransaction(
+        @Body body: RPCRequest
+    ): Response<RPCResponse.Response>
 }

@@ -25,7 +25,7 @@ object GetBalanceDispatcher: MockDispatcher {
                                 )
                             )
                     }
-                    else -> MockResponse().setResponseCode(200).setBody("")
+                    else -> MockResponse().setResponseCode(200).setBody("{}")
                 }
             }
         }
@@ -48,7 +48,7 @@ object GetBalanceDispatcher: MockDispatcher {
                                 )
                             )
                     }
-                    else -> MockResponse().setResponseCode(200).setBody("")
+                    else -> MockResponse().setResponseCode(200).setBody("{}")
                 }
             }
         }
@@ -71,7 +71,7 @@ object GetBalanceDispatcher: MockDispatcher {
                                 )
                             )
                     }
-                    else -> MockResponse().setResponseCode(200).setBody("")
+                    else -> MockResponse().setResponseCode(200).setBody("{}")
                 }
             }
         }

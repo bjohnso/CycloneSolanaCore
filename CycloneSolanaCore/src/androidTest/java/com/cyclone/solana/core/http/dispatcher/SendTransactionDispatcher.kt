@@ -25,7 +25,7 @@ object SendTransactionDispatcher: MockDispatcher {
                                 )
                             )
                     }
-                    else -> MockResponse().setResponseCode(200).setBody("")
+                    else -> MockResponse().setResponseCode(200).setBody("{}")
                 }
             }
         }
@@ -48,7 +48,7 @@ object SendTransactionDispatcher: MockDispatcher {
                                 )
                             )
                     }
-                    else -> MockResponse().setResponseCode(200).setBody("")
+                    else -> MockResponse().setResponseCode(200).setBody("{}")
                 }
             }
         }

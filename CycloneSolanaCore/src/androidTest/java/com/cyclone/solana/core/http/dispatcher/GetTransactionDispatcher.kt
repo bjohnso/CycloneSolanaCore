@@ -7,7 +7,7 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
 import org.json.JSONObject
 
-object LatestBlockhashDispatcher: MockDispatcher {
+object GetTransactionDispatcher: MockDispatcher {
     override fun getSuccessResponse(): Dispatcher {
         return object: Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
@@ -16,12 +16,12 @@ object LatestBlockhashDispatcher: MockDispatcher {
                 )
 
                 return when (body.getString("method")) {
-                    RPC.RPCMethods.GET_LATEST_BLOCKHASH -> {
+                    RPC.RPCMethods.GET_TRANSACTION -> {
                         MockResponse()
                             .setResponseCode(200)
                             .setBody(
                                 FileReader.instance.readJsonFile(
-                                    FileReader.FileResource.getLatestBlockHash
+                                    FileReader.FileResource.getTransaction
                                 )
                             )
                     }
@@ -32,26 +32,7 @@ object LatestBlockhashDispatcher: MockDispatcher {
     }
 
     override fun getErrorResponse(): Dispatcher {
-        return object: Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                val body = JSONObject(
-                    request.body.readUtf8()
-                )
-
-                return when (body.getString("method")) {
-                    RPC.RPCMethods.GET_LATEST_BLOCKHASH -> {
-                        MockResponse()
-                            .setResponseCode(200)
-                            .setBody(
-                                FileReader.instance.readJsonFile(
-                                    FileReader.FileResource.getLatestBlockHashError
-                                )
-                            )
-                    }
-                    else -> MockResponse().setResponseCode(200).setBody("{}")
-                }
-            }
-        }
+        TODO("Not yet implemented")
     }
 
     override fun getMalformedResponse(): Dispatcher {

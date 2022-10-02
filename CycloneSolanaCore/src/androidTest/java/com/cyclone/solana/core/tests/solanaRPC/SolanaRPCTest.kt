@@ -1,10 +1,13 @@
 package com.cyclone.solana.core.tests.solanaRPC
 
+import com.cyclone.solana.core.constants.Commitment
 import com.cyclone.solana.core.constants.Unit
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.RPCResponse
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.Result
+import com.cyclone.solana.core.datamodel.dto.solanaRPC.TransactionResult
 import com.cyclone.solana.core.http.client.HttpClient
 import com.cyclone.solana.core.http.dispatcher.GetBalanceDispatcher
+import com.cyclone.solana.core.http.dispatcher.GetTransactionDispatcher
 import com.cyclone.solana.core.http.dispatcher.LatestBlockhashDispatcher
 import com.cyclone.solana.core.http.dispatcher.SendTransactionDispatcher
 import com.cyclone.solana.core.network.NetworkResource
@@ -29,7 +32,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.InetAddress
 
-class SolanaRPCRepositoryTest {
+class SolanaRPCTest {
     private lateinit var solanaRPCApi: SolanaRPCApi
     private lateinit var solanaRPCRepository: SolanaRPCRepository
     private lateinit var mockWebServer: MockWebServer
@@ -90,7 +93,8 @@ class SolanaRPCRepositoryTest {
     fun get_blockhash_is_correct() {
         mockWebServer.dispatcher = LatestBlockhashDispatcher.getSuccessResponse()
 
-        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
 
         runBlocking {
             solanaRPCRepository.getLatestBlockHash().collect {
@@ -126,7 +130,8 @@ class SolanaRPCRepositoryTest {
     fun get_blockhash_is_error() {
         mockWebServer.dispatcher = LatestBlockhashDispatcher.getErrorResponse()
 
-        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
 
         runBlocking {
             solanaRPCRepository.getLatestBlockHash().collect {
@@ -155,7 +160,8 @@ class SolanaRPCRepositoryTest {
     fun get_balance_is_correct() {
         mockWebServer.dispatcher = GetBalanceDispatcher.getSuccessResponse()
 
-        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
 
         runBlocking {
             solanaRPCRepository
@@ -190,7 +196,8 @@ class SolanaRPCRepositoryTest {
     fun get_balance_is_error() {
         mockWebServer.dispatcher = GetBalanceDispatcher.getErrorResponse()
 
-        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
 
         runBlocking {
             solanaRPCRepository
@@ -221,7 +228,8 @@ class SolanaRPCRepositoryTest {
     fun send_lamports_did_succeed() {
         mockWebServer.dispatcher = SendTransactionDispatcher.getSuccessResponse()
 
-        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
 
         val publicKeyParameters = Ed25519PublicKeyParameters(
             Base58Decoder.invoke("DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D")
@@ -271,11 +279,11 @@ class SolanaRPCRepositoryTest {
         assertTrue(success.result.specificResult is Result.StringResult)
 
         val result = success.result.specificResult as Result.StringResult
-        val responseBalance = result.value
+        val responseSignature = result.value
 
         assertEquals(
             "2cDhsuZKVJoKCtDAtKGDD473yzodmGs9pRBu4TpD7Sp18FuPj5Zk1NKz3Dfk5GuDcQenRwLwBYAMExFjebYs48K2",
-            responseBalance
+            responseSignature
         )
     }
 
@@ -283,7 +291,8 @@ class SolanaRPCRepositoryTest {
     fun send_lamports_did_error() {
         mockWebServer.dispatcher = SendTransactionDispatcher.getErrorResponse()
 
-        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
 
         val publicKeyParameters = Ed25519PublicKeyParameters(
             Base58Decoder.invoke("DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D")
@@ -334,6 +343,45 @@ class SolanaRPCRepositoryTest {
         assertEquals(
             -32002,
             responseErrorCode
+        )
+    }
+
+    @Test
+    fun get_transaction_did_succeed() {
+        mockWebServer.dispatcher = GetTransactionDispatcher.getSuccessResponse()
+
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        runBlocking {
+            solanaRPCRepository
+                .getTransaction(
+                    transactionSignature = "2cDhsuZKVJoKCtDAtKGDD473yzodmGs9pRBu4TpD7Sp18FuPj5Zk1NKz3Dfk5GuDcQenRwLwBYAMExFjebYs48K2",
+                    commitment = Commitment.Commitment.CONFIRMED
+                )
+                .collect {
+                    emissions.add(it)
+                }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Success)
+
+        val success = emissions[1] as NetworkResource.Success
+
+        assertTrue(success.result.specificResult is TransactionResult)
+
+        val result = success.result.specificResult as TransactionResult
+        val responseBlockTime = result.blockTime
+
+        assertEquals(
+            1664719638,
+            responseBlockTime
         )
     }
 }

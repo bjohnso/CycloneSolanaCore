@@ -8,4 +8,5 @@ interface SolanaRPCRepository {
     suspend fun getBalance(address: String): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
     suspend fun getLatestBlockHash(): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
     suspend fun sendTransaction(vararg transaction: String): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
+    suspend fun getTransaction(transactionSignature: String, commitment: String): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
 }

@@ -19,7 +19,7 @@ sealed class RPCResponse {
         var method: String,
         private var result: Any
     ) {
-        val specificResult get() = when(method) {
+        val specificResult: Any get() = when(method) {
             RPC.RPCMethods.GET_BALANCE -> {
                 val json = Gson().toJson(result as LinkedTreeMap<*, *>)
                 val pojo = Gson().fromJson(json, Result::class.java)
@@ -34,6 +34,10 @@ sealed class RPCResponse {
                 Result.StringResult(
                     value = result as? String ?: ""
                 )
+            }
+            RPC.RPCMethods.GET_TRANSACTION -> {
+                val json = Gson().toJson(result as LinkedTreeMap<*, *>)
+                Gson().fromJson(json, TransactionResult::class.java)
             }
             else -> result
         }

@@ -1,6 +1,7 @@
 package com.cyclone.solana.core.http.dispatcher
 
 import com.cyclone.solana.core.constants.RPC
+import com.cyclone.solana.core.file.FileReader
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
@@ -18,20 +19,22 @@ object LatestBlockhashDispatcher: MockDispatcher {
                     RPC.RPCMethods.GET_LATEST_BLOCKHASH -> {
                         MockResponse()
                             .setResponseCode(200)
-                            .setBody("")
+                            .setBody(
+                                FileReader.instance.readJsonFile(
+                                    FileReader.FileResource.getLatestBlockHash
+                                )
+                            )
                     }
                     RPC.RPCMethods.GET_BALANCE -> {
                         MockResponse()
-                            .setResponseCode(200)
-                            .setBody("")
+                            .setResponseCode(200).setBody("")
                     }
                     RPC.RPCMethods.SEND_TRANSACTION -> {
                         MockResponse()
-                            .setResponseCode(200)
-                            .setBody("")
+                            .setResponseCode(200).setBody("")
                     }
                     else -> {
-                        MockResponse().setResponseCode(200)
+                        MockResponse().setResponseCode(200).setBody("")
                     }
                 }
             }

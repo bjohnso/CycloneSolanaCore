@@ -1,8 +1,8 @@
 package com.cyclone.solana.core.datamodel.dto.solanaRPC
 
-data class RPCResponse(
+data class RPCErrorResponse(
     val jsonrpc: String,
     val id: Int,
     val method: String,
-    val result: Result,
+    val error: Error
 )

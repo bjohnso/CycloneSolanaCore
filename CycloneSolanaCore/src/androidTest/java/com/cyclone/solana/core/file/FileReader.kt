@@ -2,16 +2,18 @@ package com.cyclone.solana.core.file
 
 import java.io.InputStreamReader
 
-object FileReader {
+class FileReader {
+    object FileResource {
+        const val getLatestBlockHash = "solanaRPC/get_latest_blockhash.json"
+    }
+
     fun readJsonFile(fileName: String): String {
-        val reader = InputStreamReader(
-            this.javaClass.classLoader?.getResourceAsStream(fileName)
-        )
+        return InputStreamReader(
+            this.javaClass.classLoader!!.getResourceAsStream(fileName)
+        ).use { it.readText() }
+    }
 
-        val content = reader.readText()
-
-        reader.close()
-
-        return content
+    companion object {
+        val instance = FileReader()
     }
 }

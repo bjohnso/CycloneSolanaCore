@@ -6,22 +6,31 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
-interface NetworkBoundResource<ResultType : Any> {
+interface NetworkBoundResourceProvider<ResultType : Any, ErrorType: Any> {
 
     @WorkerThread
-    fun loadFromCache(): Flow<ResultType>?
+    suspend fun loadFromNetwork(): Response<*>
 
     @WorkerThread
-    suspend fun loadFromNetwork(): Response<*>?
+    suspend fun parseNetworkResult(response: Response<*>?): ResultType
 
     @WorkerThread
-    fun validateCacheData(data: ResultType?): Boolean
+    fun loadFromCache(): Flow<ResultType>? {
+        return null // cache disabled by default
+    }
 
     @WorkerThread
-    suspend fun cacheNetworkResult(response: Response<*>?): ResultType
+    suspend fun cacheNetworkResult(result: ResultType?): ResultType? {
+        return null // cache disabled by default
+    }
 
     @WorkerThread
-    suspend fun onError(response: Response<*>?): ResultType
+    fun validateCacheData(data: ResultType): Boolean {
+        return false // cache disabled by default
+    }
+
+    @WorkerThread
+    suspend fun onError(response: Response<*>?): ErrorType?
 
     /**
      * By default execute() will first check the cache for data
@@ -32,7 +41,7 @@ interface NetworkBoundResource<ResultType : Any> {
      *
      * This method can be overridden with a completely custom implementation if required
      */
-    fun execute(): Flow<NetworkResource<ResultType, ResultType>> = flow {
+    fun execute(): Flow<NetworkResource<ResultType, ErrorType>> = flow {
         val cacheData = loadFromCache()?.first()
 
         if (cacheData != null && validateCacheData(cacheData)) {
@@ -41,14 +50,20 @@ interface NetworkBoundResource<ResultType : Any> {
             emit(NetworkResource.Loading)
             val networkData = loadFromNetwork()
 
-            when (networkData?.isSuccessful) {
-                true -> emit(
-                    NetworkResource.Success(cacheNetworkResult(networkData))
-                )
-                else -> emit(
-                    NetworkResource.Error(onError(networkData))
-                )
+            if (networkData.isSuccessful) {
+                try {
+                    parseNetworkResult(networkData).also {
+                        cacheNetworkResult(it)
+                        emit(NetworkResource.Success(it))
+                    }
+                } catch (ignore: Exception) {}
+
+                return@flow
             }
+
+            emit(NetworkResource.Error(onError(networkData)))
+
+            return@flow
         }
     }
 }

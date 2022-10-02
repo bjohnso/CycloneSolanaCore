@@ -4,8 +4,8 @@ import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
 object HttpClient {
-    private const val TIMEOUT_CONNECT = 20
-    private const val TIMEOUT_READ = 40
+    const val TIMEOUT_CONNECT = 20
+    const val TIMEOUT_READ = 40
 
     fun getOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()

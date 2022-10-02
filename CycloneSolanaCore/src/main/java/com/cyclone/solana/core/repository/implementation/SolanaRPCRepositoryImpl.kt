@@ -14,8 +14,48 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class SolanaRPCRepositoryImpl(val solanaRPCApi: SolanaRPCApi): SolanaRPCRepository {
-    override suspend fun getBalance(): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>> {
-        TODO("Not yet implemented")
+    override suspend fun getBalance(address: String): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>> {
+        val rpcRequest = RPCRequest(
+            method = RPC.RPCMethods.GET_BALANCE,
+            params = listOf(address)
+        )
+
+        val networkBoundResourceProvider = object : NetworkBoundResourceProvider<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse> {
+            override suspend fun loadFromNetwork(): Response<*> {
+                return solanaRPCApi.getBalance(rpcRequest)
+            }
+
+            override suspend fun isError(response: Response<*>?): Boolean {
+                if (response?.isSuccessful != true)
+                    return true
+
+                val body = response.body()
+
+                return body !is RPCResponse.Response || body.result == null
+            }
+
+            override suspend fun parseNetworkResult(response: Response<*>?): RPCResponse.SuccessResponse? {
+                return ExceptionUtil.tryOrDefault(null) {
+                    val body = (response?.body() as RPCResponse.Response).apply {
+                        method = RPC.RPCMethods.GET_BALANCE
+                    }
+                    val serialise = Gson().toJson(body, RPCResponse.Response::class.java)
+                    return@tryOrDefault Gson().fromJson(serialise, RPCResponse.SuccessResponse::class.java)
+                }
+            }
+
+            override suspend fun onError(response: Response<*>?): RPCResponse.ErrorResponse? {
+                return ExceptionUtil.tryOrDefault(null) {
+                    val body = (response?.body() as RPCResponse.Response).apply {
+                        method = RPC.RPCMethods.GET_BALANCE
+                    }
+                    val serialise = Gson().toJson(body, RPCResponse.Response::class.java)
+                    return@tryOrDefault Gson().fromJson(serialise, RPCResponse.ErrorResponse::class.java)
+                }
+            }
+        }
+
+        return networkBoundResourceProvider.execute()
     }
 
     override suspend fun getLatestBlockHash(): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>> {
@@ -44,14 +84,20 @@ class SolanaRPCRepositoryImpl(val solanaRPCApi: SolanaRPCApi): SolanaRPCReposito
 
             override suspend fun onError(response: Response<*>?): RPCResponse.ErrorResponse? {
                 return ExceptionUtil.tryOrDefault(null) {
-                    val serialise = Gson().toJson(response?.body(), RPCResponse.Response::class.java)
+                    val body = (response?.body() as RPCResponse.Response).apply {
+                        method = RPC.RPCMethods.GET_LATEST_BLOCKHASH
+                    }
+                    val serialise = Gson().toJson(body, RPCResponse.Response::class.java)
                     return@tryOrDefault Gson().fromJson(serialise, RPCResponse.ErrorResponse::class.java)
                 }
             }
 
             override suspend fun parseNetworkResult(response: Response<*>?): RPCResponse.SuccessResponse? {
                 return ExceptionUtil.tryOrDefault(null) {
-                    val serialise = Gson().toJson(response?.body(), RPCResponse.Response::class.java)
+                    val body = (response?.body() as RPCResponse.Response).apply {
+                        method = RPC.RPCMethods.GET_LATEST_BLOCKHASH
+                    }
+                    val serialise = Gson().toJson(body, RPCResponse.Response::class.java)
                     return@tryOrDefault Gson().fromJson(serialise, RPCResponse.SuccessResponse::class.java)
                 }
             }

@@ -7,7 +7,7 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
 import org.json.JSONObject
 
-object LatestBlockhashDispatcher: MockDispatcher {
+object GetBalanceDispatcher: MockDispatcher {
     override fun getSuccessResponse(): Dispatcher {
         return object: Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
@@ -16,12 +16,12 @@ object LatestBlockhashDispatcher: MockDispatcher {
                 )
 
                 return when (body.getString("method")) {
-                    RPC.RPCMethods.GET_LATEST_BLOCKHASH -> {
+                    RPC.RPCMethods.GET_BALANCE -> {
                         MockResponse()
                             .setResponseCode(200)
                             .setBody(
                                 FileReader.instance.readJsonFile(
-                                    FileReader.FileResource.getLatestBlockHash
+                                    FileReader.FileResource.getBalance
                                 )
                             )
                     }
@@ -39,7 +39,30 @@ object LatestBlockhashDispatcher: MockDispatcher {
                 )
 
                 return when (body.getString("method")) {
-                    RPC.RPCMethods.GET_LATEST_BLOCKHASH -> {
+                    RPC.RPCMethods.GET_BALANCE -> {
+                        MockResponse()
+                            .setResponseCode(200)
+                            .setBody(
+                                FileReader.instance.readJsonFile(
+                                    FileReader.FileResource.getBalanceError
+                                )
+                            )
+                    }
+                    else -> MockResponse().setResponseCode(200).setBody("")
+                }
+            }
+        }
+    }
+
+    override fun getMalformedResponse(): Dispatcher {
+        return object: Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                val body = JSONObject(
+                    request.body.readUtf8()
+                )
+
+                return when (body.getString("method")) {
+                    RPC.RPCMethods.GET_BALANCE -> {
                         MockResponse()
                             .setResponseCode(200)
                             .setBody(
@@ -52,9 +75,5 @@ object LatestBlockhashDispatcher: MockDispatcher {
                 }
             }
         }
-    }
-
-    override fun getMalformedResponse(): Dispatcher {
-        TODO("Not yet implemented")
     }
 }

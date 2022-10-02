@@ -1,4 +1,4 @@
-name: Run Unit tests for core module
+name: Run Unit tests for CycloneSolanaCore
 on:
   push:
     branches:

@@ -6,6 +6,8 @@ class FileReader {
     object FileResource {
         const val getLatestBlockHash = "solanaRPC/get_latest_blockhash.json"
         const val getLatestBlockHashError = "solanaRPC/get_latest_blockhash_error.json"
+        const val getBalance = "solanaRPC/get_balance.json"
+        const val getBalanceError = "solanaRPC/get_balance_error.json"
     }
 
     fun readJsonFile(fileName: String): String {

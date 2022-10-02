@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface SolanaRPCRepository {
     suspend fun getBalance(address: String): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
     suspend fun getLatestBlockHash(): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
-    suspend fun transferLamports(): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
+    suspend fun sendTransaction(vararg transaction: String): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>
 }

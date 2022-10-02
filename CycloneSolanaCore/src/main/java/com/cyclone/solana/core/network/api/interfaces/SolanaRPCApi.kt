@@ -20,7 +20,7 @@ interface SolanaRPCApi {
     ): Response<RPCResponse.Response>
 
     @POST("/")
-    suspend fun transferLamports(
+    suspend fun sendTransaction(
         @Body body: RPCRequest
     ): Response<RPCResponse.Response>
 }

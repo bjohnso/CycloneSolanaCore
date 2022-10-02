@@ -1,19 +1,27 @@
 package com.cyclone.solana.core.tests.solanaRPC
 
+import com.cyclone.solana.core.constants.Unit
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.RPCResponse
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.Result
 import com.cyclone.solana.core.http.client.HttpClient
 import com.cyclone.solana.core.http.dispatcher.GetBalanceDispatcher
 import com.cyclone.solana.core.http.dispatcher.LatestBlockhashDispatcher
+import com.cyclone.solana.core.http.dispatcher.SendTransactionDispatcher
 import com.cyclone.solana.core.network.NetworkResource
 import com.cyclone.solana.core.network.api.interfaces.SolanaRPCApi
 import com.cyclone.solana.core.repository.implementation.SolanaRPCRepositoryImpl
 import com.cyclone.solana.core.repository.interfaces.SolanaRPCRepository
+import com.cyclone.solana.core.usecase.Base58Decoder
+import com.cyclone.solana.core.usecase.Base58Encoder
+import com.cyclone.solana.core.usecase.SolTransferTransaction
 import junit.framework.Assert.*
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.tls.HandshakeCertificates
 import okhttp3.tls.HeldCertificate
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -205,6 +213,126 @@ class SolanaRPCRepositoryTest {
 
         assertEquals(
             -32600,
+            responseErrorCode
+        )
+    }
+
+    @Test
+    fun send_lamports_did_succeed() {
+        mockWebServer.dispatcher = SendTransactionDispatcher.getSuccessResponse()
+
+        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        val publicKeyParameters = Ed25519PublicKeyParameters(
+            Base58Decoder.invoke("DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D")
+        )
+
+        val privateKeyParameters = Ed25519PrivateKeyParameters(
+            Base58Decoder.invoke("7oLVLF7Pwxdwc6BUqLGdTgg6y5hMcgW3gkwwRQsiRrRT")
+        )
+
+        val keyPair = AsymmetricCipherKeyPair(
+            publicKeyParameters,
+            privateKeyParameters
+        )
+
+        val fromAddress = "DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D"
+        val toAddress = "W5RJACTF8t4TC1LSBr4SXqkuZkFMM8yZFvRqqfM6tqM"
+        val blockhash = "FBbwSyXd6KvK69g8ziWdPjJfegRgUuCDm2RbViKoD26Q"
+        val lamports = Unit.Units.LAMPORTS_PER_SOL
+
+        val transaction = SolTransferTransaction.invoke(
+            fromAddress,
+            toAddress,
+            blockhash,
+            lamports
+        ).apply {
+            sign(listOf(keyPair))
+        }.serialise()
+
+        runBlocking {
+            solanaRPCRepository
+                .sendTransaction(Base58Encoder.invoke(transaction))
+                .collect {
+                    emissions.add(it)
+                }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Success)
+
+        val success = emissions[1] as NetworkResource.Success
+
+        assertTrue(success.result.specificResult is Result.StringResult)
+
+        val result = success.result.specificResult as Result.StringResult
+        val responseBalance = result.value
+
+        assertEquals(
+            "2cDhsuZKVJoKCtDAtKGDD473yzodmGs9pRBu4TpD7Sp18FuPj5Zk1NKz3Dfk5GuDcQenRwLwBYAMExFjebYs48K2",
+            responseBalance
+        )
+    }
+
+    @Test
+    fun send_lamports_did_error() {
+        mockWebServer.dispatcher = SendTransactionDispatcher.getErrorResponse()
+
+        val emissions = mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        val publicKeyParameters = Ed25519PublicKeyParameters(
+            Base58Decoder.invoke("DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D")
+        )
+
+        val privateKeyParameters = Ed25519PrivateKeyParameters(
+            Base58Decoder.invoke("7oLVLF7Pwxdwc6BUqLGdTgg6y5hMcgW3gkwwRQsiRrRT")
+        )
+
+        val keyPair = AsymmetricCipherKeyPair(
+            publicKeyParameters,
+            privateKeyParameters
+        )
+
+        val fromAddress = "DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D"
+        val toAddress = "W5RJACTF8t4TC1LSBr4SXqkuZkFMM8yZFvRqqfM6tqM"
+        val blockhash = "FBbwSyXd6KvK69g8ziWdPjJfegRgUuCDm2RbViKoD26Q"
+        val lamports = Unit.Units.LAMPORTS_PER_SOL
+
+        val transaction = SolTransferTransaction.invoke(
+            fromAddress,
+            toAddress,
+            blockhash,
+            lamports
+        ).apply {
+            sign(listOf(keyPair))
+        }.serialise()
+
+        runBlocking {
+            solanaRPCRepository
+                .sendTransaction(Base58Encoder.invoke(transaction))
+                .collect {
+                    emissions.add(it)
+                }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Error)
+
+        val error = emissions[1] as NetworkResource.Error
+        val responseErrorCode = error.error?.error?.code
+
+        assertEquals(
+            -32002,
             responseErrorCode
         )
     }

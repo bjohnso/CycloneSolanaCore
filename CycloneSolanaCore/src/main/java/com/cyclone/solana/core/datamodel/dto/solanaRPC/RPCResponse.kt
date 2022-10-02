@@ -1,31 +1,39 @@
 package com.cyclone.solana.core.datamodel.dto.solanaRPC
 
 import com.cyclone.solana.core.constants.RPC
+import com.google.gson.Gson
+import com.google.gson.internal.LinkedTreeMap
 
 sealed class RPCResponse {
     data class Response(
         val jsonrpc: String,
         val id: Int,
         var method: String,
-        val result: Result? = null,
-        val error: Error? = null
+        val result: Any?,
+        val error: Error?
     )
 
     data class SuccessResponse(
         val jsonrpc: String,
         val id: Int,
         var method: String,
-        private var result: Result
+        private var result: Any
     ) {
         val specificResult get() = when(method) {
             RPC.RPCMethods.GET_BALANCE -> {
-                Result.LongResult.fromResult(result)
+                val json = Gson().toJson(result as LinkedTreeMap<*, *>)
+                val pojo = Gson().fromJson(json, Result::class.java)
+                Result.LongResult.fromResult(pojo)
             }
             RPC.RPCMethods.GET_LATEST_BLOCKHASH -> {
-                Result.JsonResult.fromResult(result)
+                val json = Gson().toJson(result as LinkedTreeMap<*, *>)
+                val pojo = Gson().fromJson(json, Result::class.java)
+                Result.JsonResult.fromResult(pojo)
             }
             RPC.RPCMethods.SEND_TRANSACTION -> {
-                result
+                Result.StringResult(
+                    value = result as? String ?: ""
+                )
             }
             else -> result
         }

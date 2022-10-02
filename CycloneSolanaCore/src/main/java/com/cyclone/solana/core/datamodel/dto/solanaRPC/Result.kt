@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.internal.LinkedTreeMap
 
 open class Result(
-    open val context: Context,
+    open val context: Context? = null,
     @SerializedName("value")
     var rawValue: Any? = null
 ) {
     data class JsonResult(
-        override val context: Context,
+        override val context: Context? = null,
         val value: JsonObject,
     ): Result(context) {
         companion object {
@@ -25,7 +25,7 @@ open class Result(
     }
 
     data class StringResult(
-        override val context: Context,
+        override val context: Context? = null,
         val value: String,
     ): Result(context) {
         companion object {
@@ -39,7 +39,7 @@ open class Result(
     }
 
     data class LongResult(
-        override val context: Context,
+        override val context: Context? = null,
         val value: Long,
     ): Result(context) {
         companion object {

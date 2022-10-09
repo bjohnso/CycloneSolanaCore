@@ -3,6 +3,7 @@ package com.cyclone.solana.core.repository.implementation
 import com.cyclone.solana.core.constants.RPC
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.RPCRequest
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.RPCResponse
+import com.cyclone.solana.core.datamodel.dto.solanaRPC.TransactionResult
 import com.cyclone.solana.core.network.NetworkBoundResourceProvider
 import com.cyclone.solana.core.network.NetworkResource
 import com.cyclone.solana.core.network.api.interfaces.SolanaRPCApi
@@ -10,6 +11,7 @@ import com.cyclone.solana.core.repository.interfaces.SolanaRPCRepository
 import com.cyclone.solana.core.util.ExceptionUtil
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.internal.LinkedTreeMap
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
@@ -172,7 +174,14 @@ class SolanaRPCRepositoryImpl(val solanaRPCApi: SolanaRPCApi): SolanaRPCReposito
 
                 val body = response.body()
 
-                return body !is RPCResponse.Response || body.result == null
+                return if (body !is RPCResponse.Response || body.result == null) {
+                    true
+                } else {
+                    ExceptionUtil.tryOrDefault(null) {
+                        val json = Gson().toJson(body.result as LinkedTreeMap<*, *>)
+                        Gson().fromJson(json, TransactionResult::class.java)
+                    }?.meta?.err != null
+                }
             }
 
             override suspend fun onError(response: Response<*>?): RPCResponse.ErrorResponse? {

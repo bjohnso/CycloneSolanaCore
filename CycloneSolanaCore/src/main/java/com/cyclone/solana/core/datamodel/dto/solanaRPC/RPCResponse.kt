@@ -47,6 +47,15 @@ sealed class RPCResponse {
         val jsonrpc: String,
         val id: Int,
         var method: String,
+        private var result: Any?,
         val error: Error
-    )
+    ) {
+        val specificResult: Any? get() = when(method) {
+            RPC.RPCMethods.GET_TRANSACTION -> {
+                val json = Gson().toJson(result as LinkedTreeMap<*, *>)
+                Gson().fromJson(json, TransactionResult::class.java)
+            }
+            else -> result
+        }
+    }
 }

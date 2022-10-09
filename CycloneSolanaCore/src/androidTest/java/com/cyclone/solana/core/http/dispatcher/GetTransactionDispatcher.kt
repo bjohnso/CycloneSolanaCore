@@ -32,7 +32,26 @@ object GetTransactionDispatcher: MockDispatcher {
     }
 
     override fun getErrorResponse(): Dispatcher {
-        TODO("Not yet implemented")
+        return object: Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                val body = JSONObject(
+                    request.body.readUtf8()
+                )
+
+                return when(body.getString("method")) {
+                    RPC.RPCMethods.GET_TRANSACTION -> {
+                        MockResponse()
+                            .setResponseCode(200)
+                            .setBody(
+                                FileReader.instance.readJsonFile(
+                                    FileReader.FileResource.getTransactionError
+                                )
+                            )
+                    }
+                    else -> MockResponse().setResponseCode(200).setBody("{\"error\": {}}")
+                }
+            }
+        }
     }
 
     override fun getMalformedResponse(): Dispatcher {

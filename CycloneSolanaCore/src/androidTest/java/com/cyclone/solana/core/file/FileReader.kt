@@ -11,6 +11,7 @@ class FileReader {
         const val sendTransaction = "solanaRPC/send_transaction.json"
         const val sendTransactionError = "solanaRPC/send_transaction_error.json"
         const val getTransaction = "solanaRPC/get_transaction.json"
+        const val getTransactionError = "solanaRPC/get_transaction_error.json"
     }
 
     fun readJsonFile(fileName: String): String {

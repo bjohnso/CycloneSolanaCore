@@ -384,4 +384,41 @@ class SolanaRPCTest {
             responseBlockTime
         )
     }
+
+    @Test
+    fun get_transaction_did_not_succeed() {
+        mockWebServer.dispatcher = GetTransactionDispatcher.getErrorResponse()
+
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        runBlocking {
+            solanaRPCRepository.getTransaction(
+                transactionSignature = "2cDhsuZKVJoKCtDAtKGDD473yzodmGs9pRBu4TpD7Sp18FuPj5Zk1NKz3Dfk5GuDcQenRwLwBYAMExFjebYs48K2",
+                commitment = Commitment.Commitment.CONFIRMED
+            ).collect {
+                emissions.add(it)
+            }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Error)
+
+        val error = emissions[1] as NetworkResource.Error
+
+        assertTrue(error.error?.specificResult is TransactionResult)
+
+        val result = error.error?.specificResult as TransactionResult
+        val responseBlockTime = result.blockTime
+
+        assertEquals(
+            1664719638,
+            responseBlockTime
+        )
+    }
 }

@@ -32,6 +32,10 @@ abstract class CycloneDatabase: RoomDatabase() {
             }
         }
 
+        fun getInstance(): CycloneDatabase? {
+            return instance
+        }
+
         private fun buildDatabase(context: Context): CycloneDatabase {
             val passphrase: ByteArray = SQLiteDatabase.getBytes("password".toCharArray())
             val factory = SupportFactory(passphrase, object: SQLiteDatabaseHook {

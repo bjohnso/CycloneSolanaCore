@@ -3,19 +3,30 @@ package com.cyclone.solana.core.tests.room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.cyclone.solana.core.datamodel.entity.Seed
 import com.cyclone.solana.core.extensions.hexToByteArray
+import com.cyclone.solana.core.repository.implementation.SeedRepositoryImpl
+import com.cyclone.solana.core.repository.interfaces.SeedRepository
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertArrayEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 class SeedPersistenceTest: BaseRoomTest() {
+    lateinit var seedRepository: SeedRepository
+
+    @Before
+    fun setupRepository() {
+        seedRepository = SeedRepositoryImpl(database)
+    }
+
     @Test
     fun derived_seed_is_persisted() = runBlocking {
         val hexSeed = "b35cd271ce77c440d5aac7fd591403e3"
@@ -25,13 +36,13 @@ class SeedPersistenceTest: BaseRoomTest() {
             seed = hexSeed.hexToByteArray()
         )
 
-        database.seedDao().saveSeeds(seed)
+        seedRepository.saveSeeds(seed)
 
         var retrievedSeed: Seed? = null
 
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            retrievedSeed = database.seedDao().getSeed()
+            retrievedSeed = seedRepository.getSeed().first()
             latch.countDown()
         }
 
@@ -51,13 +62,13 @@ class SeedPersistenceTest: BaseRoomTest() {
             seed = hexSeed.hexToByteArray()
         )
 
-        database.seedDao().saveSeeds(seed)
+        seedRepository.saveSeeds(seed)
 
         var retrievedSeed: Seed? = null
 
         val saveLatch = CountDownLatch(1)
         val saveJob = async(Dispatchers.IO) {
-            retrievedSeed = database.seedDao().getSeed()
+            retrievedSeed = seedRepository.getSeed().first()
             saveLatch.countDown()
         }
 
@@ -67,11 +78,11 @@ class SeedPersistenceTest: BaseRoomTest() {
         assertEquals(hexSeed, retrievedSeed?.hex)
         assertArrayEquals(hexSeed.hexToByteArray(), retrievedSeed?.seed)
 
-        database.seedDao().deleteSeeds(seed)
+        seedRepository.deleteSeeds(seed)
 
         val deleteLatch = CountDownLatch(1)
         val deleteJob = async(Dispatchers.IO) {
-            retrievedSeed = database.seedDao().getSeed()
+            retrievedSeed = seedRepository.getSeed().first()
             deleteLatch.countDown()
         }
 

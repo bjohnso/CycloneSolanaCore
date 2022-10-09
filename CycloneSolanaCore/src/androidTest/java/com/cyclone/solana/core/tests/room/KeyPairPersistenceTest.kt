@@ -2,12 +2,16 @@ package com.cyclone.solana.core.tests.room
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.cyclone.solana.core.datamodel.entity.KeyPair
+import com.cyclone.solana.core.repository.implementation.KeyPairRepositoryImpl
+import com.cyclone.solana.core.repository.interfaces.KeyPairRepository
 import com.cyclone.solana.core.usecase.Base58Decoder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertArrayEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
@@ -149,6 +153,13 @@ class KeyPairPersistenceTest: BaseRoomTest() {
         "6vn3aboKDvZVijCycgpKgYvgon6Wuf1MGHkTYrV5iXg",
     )
 
+    lateinit var keyPairRepository: KeyPairRepository
+
+    @Before
+    fun setupRepository() {
+        keyPairRepository = KeyPairRepositoryImpl(database)
+    }
+
     @Test
     fun derived_key_pair_is_persisted() = runBlocking {
         val inputKeyPairs = expectedPublicKeys.mapIndexed { index, key ->
@@ -160,13 +171,13 @@ class KeyPairPersistenceTest: BaseRoomTest() {
             )
         }
 
-        database.keyPairDao().saveKeyPairs(*inputKeyPairs.toTypedArray())
+        keyPairRepository.saveKeyPairs(*inputKeyPairs.toTypedArray())
 
         var retrievedKeyPairs = listOf<KeyPair>()
 
         val latch = CountDownLatch(1)
         val job = async(Dispatchers.IO) {
-            retrievedKeyPairs = database.keyPairDao().getAllKeyPairs()
+            retrievedKeyPairs = keyPairRepository.getAllKeyPairs().first()
             latch.countDown()
         }
 
@@ -190,13 +201,13 @@ class KeyPairPersistenceTest: BaseRoomTest() {
             )
         }
 
-        database.keyPairDao().saveKeyPairs(*inputKeyPairs.toTypedArray())
+        keyPairRepository.saveKeyPairs(*inputKeyPairs.toTypedArray())
 
         var retrievedKeyPairs = listOf<KeyPair>()
 
         val saveLatch = CountDownLatch(1)
         val saveJob = async(Dispatchers.IO) {
-            retrievedKeyPairs = database.keyPairDao().getAllKeyPairs()
+            retrievedKeyPairs = keyPairRepository.getAllKeyPairs().first()
             saveLatch.countDown()
         }
 
@@ -208,13 +219,13 @@ class KeyPairPersistenceTest: BaseRoomTest() {
             retrievedKeyPairs.toTypedArray()
         )
 
-        database.keyPairDao().deleteAllKeyPairs()
+        keyPairRepository.deleteAllKeyPairs()
 
         retrievedKeyPairs = listOf()
 
         val deleteLatch = CountDownLatch(1)
         val deleteJob = async(Dispatchers.IO) {
-            retrievedKeyPairs = database.keyPairDao().getAllKeyPairs()
+            retrievedKeyPairs = keyPairRepository.getAllKeyPairs().first()
             deleteLatch.countDown()
         }
 

@@ -2,6 +2,7 @@ package com.cyclone.solana.core.database.dao
 
 import androidx.room.*
 import com.cyclone.solana.core.datamodel.entity.KeyPair
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface KeyPairDao {
@@ -10,11 +11,11 @@ interface KeyPairDao {
 
     @Transaction
     @Query("select * from tbl_keypairs where public_key = :publicKey limit 1")
-    fun getKeyPair(publicKey: String): KeyPair?
+    fun getKeyPair(publicKey: String): Flow<KeyPair?>
 
     @Transaction
     @Query("select * from tbl_keypairs")
-    fun getAllKeyPairs(): List<KeyPair>
+    fun getAllKeyPairs(): Flow<List<KeyPair>>
 
     @Delete
     fun deleteKeyPairs(vararg keyPair: KeyPair)

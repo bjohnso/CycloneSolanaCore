@@ -11,11 +11,11 @@ interface SeedDao {
 
     @Transaction
     @Query("select * from tbl_seeds limit 1")
-    fun getSeed(): Seed?
+    fun getSeed(): Flow<Seed?>
 
     @Transaction
-    @Query("select * from tbl_seeds limit 1")
-    fun flowOnSeed(): Flow<Seed?>
+    @Query("select * from tbl_seeds")
+    fun getSeedAllSeeds(): Flow<List<Seed>>
 
     @Delete
     fun deleteSeeds(vararg seed: Seed)

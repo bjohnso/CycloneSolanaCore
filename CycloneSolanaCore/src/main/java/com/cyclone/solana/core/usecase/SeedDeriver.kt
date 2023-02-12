@@ -17,7 +17,7 @@ object SeedDeriver {
 
         val entropyBinaryString = seed
             .toBinaryString()
-            .padStart(entropyLength)
+            .padStart(entropyLength, '0')
 
         val entropy = entropyBinaryString.binaryToByteArray()
 

@@ -26,8 +26,14 @@ abstract class CycloneDatabase: RoomDatabase() {
         @Volatile private var instance: CycloneDatabase? = null
         private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
-            instance ?: buildDatabase(context = context).also {
+        operator fun invoke(
+            context: Context,
+            password: String
+        ) = instance ?: synchronized(LOCK) {
+            instance ?: buildDatabase(
+                context = context,
+                password = password
+            ).also {
                 instance = it
             }
         }
@@ -36,8 +42,11 @@ abstract class CycloneDatabase: RoomDatabase() {
             return instance
         }
 
-        private fun buildDatabase(context: Context): CycloneDatabase {
-            val passphrase: ByteArray = SQLiteDatabase.getBytes("password".toCharArray())
+        private fun buildDatabase(
+            context: Context,
+            password: String
+        ): CycloneDatabase {
+            val passphrase: ByteArray = SQLiteDatabase.getBytes(password.toCharArray())
             val factory = SupportFactory(passphrase, object: SQLiteDatabaseHook {
                 override fun preKey(database: SQLiteDatabase?) {}
 

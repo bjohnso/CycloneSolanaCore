@@ -65,7 +65,7 @@ class SolanaRPCRepositoryImpl(val solanaRPCApi: SolanaRPCApi): SolanaRPCReposito
             method = RPC.RPCMethods.GET_LATEST_BLOCKHASH,
             params = listOf(
                 JsonObject().apply {
-                    addProperty("commitment", "processed")
+                    addProperty("commitment", "finalized")
                 }
             )
         )

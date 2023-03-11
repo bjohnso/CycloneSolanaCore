@@ -15,7 +15,12 @@ object MnemonicEncoder {
             .takeLast(entropyLength)
             .padStart(entropyLength, '0')
 
-        val checksum = hashEntropy(seed).toBinaryString().takeLast(checksumLength)
+        val checksum = hashEntropy(
+            seed
+        )
+            .toBinaryString()
+            .padStart(256, '0')
+            .take(checksumLength)
 
         val mnemonicBinaryString = "$entropyBinaryString$checksum"
 

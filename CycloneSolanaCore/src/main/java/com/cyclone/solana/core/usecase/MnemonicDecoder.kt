@@ -55,7 +55,8 @@ object MnemonicDecoder {
 
         val hashedChecksum = hashedEntropy
             .toBinaryString()
-            .takeLast(checksumLength)
+            .padStart(256, '0')
+            .take(checksumLength)
 
         return checksum == hashedChecksum
     }

@@ -24,7 +24,7 @@ class MnemonicUnitTest {
             "wool",
             "silly",
             "abstract",
-            "shoulder"
+            "shock",
         )
 
         val result = MnemonicEncoder.invoke(
@@ -54,7 +54,7 @@ class MnemonicUnitTest {
                 "wool",
                 "silly",
                 "abstract",
-                "shoulder"
+                "shock",
             )
         )
 

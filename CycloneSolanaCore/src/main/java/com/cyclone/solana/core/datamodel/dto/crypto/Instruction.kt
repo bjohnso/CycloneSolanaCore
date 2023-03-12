@@ -1,9 +1,11 @@
 package com.cyclone.solana.core.datamodel.dto.crypto
 
+import androidx.annotation.Keep
 import com.cyclone.solana.core.extensions.toByteArray
 import com.cyclone.solana.core.datamodel.interfaces.crypto.InstructionData
 import com.cyclone.solana.core.usecase.CompactArrayEncoder
 
+@Keep
 open class Instruction(
     open val programIdIndex: Int,
     open val accountIndices: List<Int>,

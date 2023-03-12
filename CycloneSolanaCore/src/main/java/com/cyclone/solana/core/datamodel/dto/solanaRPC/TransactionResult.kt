@@ -1,5 +1,8 @@
 package com.cyclone.solana.core.datamodel.dto.solanaRPC
 
+import androidx.annotation.Keep
+
+@Keep
 data class TransactionResult(
     val blockTime: Long,
     val meta: Meta,

@@ -1,9 +1,11 @@
 package com.cyclone.solana.core.datamodel.dto.crypto
 
+import androidx.annotation.Keep
 import com.cyclone.solana.core.extensions.flatten
 import com.cyclone.solana.core.usecase.Base58Decoder
 import com.cyclone.solana.core.usecase.CompactArrayEncoder
 
+@Keep
 data class Message(
     val header: Header,
     val accountAddresses: List<String>,

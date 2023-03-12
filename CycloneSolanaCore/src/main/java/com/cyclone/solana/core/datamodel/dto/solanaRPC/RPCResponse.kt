@@ -1,9 +1,11 @@
 package com.cyclone.solana.core.datamodel.dto.solanaRPC
 
+import androidx.annotation.Keep
 import com.cyclone.solana.core.constants.RPC
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 
+@Keep
 sealed class RPCResponse {
     data class Response(
         val jsonrpc: String,

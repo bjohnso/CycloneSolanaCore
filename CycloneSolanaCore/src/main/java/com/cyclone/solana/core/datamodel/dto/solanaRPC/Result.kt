@@ -1,10 +1,12 @@
 package com.cyclone.solana.core.datamodel.dto.solanaRPC
 
+import androidx.annotation.Keep
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.google.gson.internal.LinkedTreeMap
 
+@Keep
 open class Result(
     open val context: Context? = null,
     @SerializedName("value")

@@ -1,5 +1,8 @@
 package com.cyclone.solana.core.datamodel.dto.crypto
 
+import androidx.annotation.Keep
+
+@Keep
 data class Header(
     val noSigs: Int,
     val noSignedReadOnlyAccounts: Int,

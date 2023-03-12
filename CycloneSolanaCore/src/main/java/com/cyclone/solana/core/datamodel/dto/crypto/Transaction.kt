@@ -1,9 +1,11 @@
 package com.cyclone.solana.core.datamodel.dto.crypto
 
+import androidx.annotation.Keep
 import com.cyclone.solana.core.usecase.CompactArrayEncoder
 import com.cyclone.solana.core.usecase.Ed25119Signer
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair
 
+@Keep
 data class Transaction(
     var noSignatures: Int = 0,
     var signatures: ByteArray = ByteArray(0),

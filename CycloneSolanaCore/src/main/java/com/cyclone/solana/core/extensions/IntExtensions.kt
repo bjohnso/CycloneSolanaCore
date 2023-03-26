@@ -14,3 +14,20 @@ fun Int.toLEByteArray(byteSize: Int): ByteArray {
         .putInt(this)
         .array()
 }
+
+fun Int.toBEByteArray(byteSize: Int): ByteArray {
+    return ByteBuffer
+        .allocate(byteSize)
+        .order(ByteOrder.BIG_ENDIAN)
+        .putInt(this)
+        .array()
+}
+
+
+fun UInt.toBEByteArray(): ByteArray {
+    return ByteBuffer
+        .allocate(4)
+        .order(ByteOrder.BIG_ENDIAN)
+        .putInt(this.toInt())
+        .array()
+}

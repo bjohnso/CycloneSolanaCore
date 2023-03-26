@@ -10,21 +10,21 @@ class MnemonicUnitTest {
 
     @Test
     fun encode_to_12_word_mnemonic_is_correct() {
-        val hexSeed = "b35cd271ce77c440d5aac7fd591403e3"
+        val hexSeed = "2e5a2fb1ecf80b8995b82a2801dc6d03"
 
         val expected = listOf(
-            "rebuild",
-            "track",
-            "organ",
-            "ostrich",
-            "labor",
-            "call",
-            "find",
-            "flight",
-            "wool",
-            "silly",
-            "abstract",
-            "shock",
+            "comic",
+            "sphere",
+            "unaware",
+            "supreme",
+            "level",
+            "shadow",
+            "finger",
+            "aim",
+            "chimney",
+            "auction",
+            "brave",
+            "alter"
         )
 
         val result = MnemonicEncoder.invoke(
@@ -39,22 +39,22 @@ class MnemonicUnitTest {
 
     @Test
     fun decode_from_12_word_mnemonic_is_correct() {
-        val expected = "b35cd271ce77c440d5aac7fd591403e3".hexToByteArray()
+        val expected = "2e5a2fb1ecf80b8995b82a2801dc6d03".hexToByteArray()
 
         val result = MnemonicDecoder.invoke(
             listOf(
-                "rebuild",
-                "track",
-                "organ",
-                "ostrich",
-                "labor",
-                "call",
-                "find",
-                "flight",
-                "wool",
-                "silly",
-                "abstract",
-                "shock",
+                "comic",
+                "sphere",
+                "unaware",
+                "supreme",
+                "level",
+                "shadow",
+                "finger",
+                "aim",
+                "chimney",
+                "auction",
+                "brave",
+                "alter"
             )
         )
 

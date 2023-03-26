@@ -1,6 +1,6 @@
 package com.cyclone.solana.core.encryption
 
-import com.cyclone.solana.core.datamodel.dto.keypair.SolanaKeypair
+import com.cyclone.solana.core.datamodel.dto.keypair.SolanaKeyPair
 import com.cyclone.solana.core.extensions.toBEByteArray
 import org.bouncycastle.crypto.Mac
 import org.bouncycastle.crypto.digests.SHA512Digest
@@ -55,10 +55,10 @@ data class ExtendedSecretKey(
         )
     }
 
-    fun keyPair(): SolanaKeypair {
+    fun keyPair(): SolanaKeyPair {
         val privateKey = Ed25519PrivateKeyParameters(secretKey)
         val publicKey = privateKey.generatePublicKey()
-        return SolanaKeypair(
+        return SolanaKeyPair(
             publicKey.encoded,
             privateKey.encoded
         )

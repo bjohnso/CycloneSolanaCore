@@ -1,5 +1,6 @@
 package com.cyclone.solana.core.extensions
 
+import com.cyclone.solana.core.usecase.Base58Decoder
 import java.math.BigInteger
 
 fun String.binaryToHex(): String = BigInteger(this, 2).toString(16)
@@ -25,3 +26,5 @@ fun String.binaryToByteArray(): ByteArray {
 
     return bytes.toByteArray()
 }
+
+fun String.base58ToByteArray() = Base58Decoder.invoke(this)

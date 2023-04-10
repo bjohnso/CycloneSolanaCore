@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
-interface NetworkBoundResourceProvider<ResultType : Any, ErrorType: Any> {
+interface NetworkResourceProvider<ResultType : Any, ErrorType: Any> {
 
     @WorkerThread
     suspend fun loadFromNetwork(): Response<*>
@@ -49,7 +49,7 @@ interface NetworkBoundResourceProvider<ResultType : Any, ErrorType: Any> {
         val cacheData = loadFromCache()?.first()
 
         if (cacheData != null && validateCacheData(cacheData)) {
-            emit(NetworkResource.Cached(cacheData))
+            emit(NetworkResource.Success(cacheData))
         } else {
             emit(NetworkResource.Loading)
             val networkData = loadFromNetwork()

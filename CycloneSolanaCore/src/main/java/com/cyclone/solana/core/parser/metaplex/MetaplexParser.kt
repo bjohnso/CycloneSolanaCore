@@ -7,7 +7,7 @@ import com.cyclone.solana.core.extensions.toBase58
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-object Decoder {
+object MetaplexParser {
     fun unpackMetadataAccount(data: ByteArray): MetaData {
         require(data[0].toInt() == 4)
         val buffer = ByteBuffer.wrap(data).apply { position(1) }

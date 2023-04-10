@@ -5,7 +5,7 @@ import com.cyclone.solana.core.datamodel.dto.metaplex.MetaData
 import com.cyclone.solana.core.encryption.derivation.Derivation
 import com.cyclone.solana.core.extensions.base58ToByteArray
 import com.cyclone.solana.core.extensions.toBase58
-import com.cyclone.solana.core.parser.metaplex.Decoder
+import com.cyclone.solana.core.parser.metaplex.MetaplexParser
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.junit.Assert
@@ -37,7 +37,7 @@ class NFTTest {
         val metaplexData = "BL0oT94VJre5Nqdr3m2JVbZhflagHl0DCd7aPEJuCnygOZD4GarKfuP80i1oVZ+uPPsiSLQum2MYash6e/sezy4gAAAAU29sIE90dGVycyAjNwAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAT1RURVIAAAAAAMgAAABodHRwczovL2Fyd2VhdmUubmV0L2UzWjB2c3NGZG83alNTNzg3OXEzd18tUzE0a05vZnM5dDlYN2pjR3hDZzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOgDAQIAAAC7Nfcto5p5uun0ze44YN7QnloQrhLd5txolTwKUZHZtwEAvShP3hUmt7k2p2vebYlVtmF+VqAeXQMJ3to8Qm4KfKAAZAABAf4BAAEBrlOUjkfjFn/PzBUJJh5kKhczbpRLeSV8x/oNwglrCR4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
         val dataRawBytes = Base64.getDecoder().decode(metaplexData)
 
-        val metaData = Decoder.unpackMetadataAccount(dataRawBytes)
+        val metaData = MetaplexParser.unpackMetadataAccount(dataRawBytes)
 
         val json = Json {
             ignoreUnknownKeys = true

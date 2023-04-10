@@ -2,9 +2,8 @@ package com.cyclone.solana.core.tests.solanaRPC
 
 import com.cyclone.solana.core.constants.Commitment
 import com.cyclone.solana.core.constants.Unit
-import com.cyclone.solana.core.datamodel.dto.solanaRPC.RPCResponse
-import com.cyclone.solana.core.datamodel.dto.solanaRPC.Result
-import com.cyclone.solana.core.datamodel.dto.solanaRPC.TransactionResult
+import com.cyclone.solana.core.datamodel.dto.solanaRPC.response.RPCResponse
+import com.cyclone.solana.core.datamodel.dto.solanaRPC.result.Result
 import com.cyclone.solana.core.http.client.HttpClient
 import com.cyclone.solana.core.http.dispatcher.GetBalanceDispatcher
 import com.cyclone.solana.core.http.dispatcher.GetTransactionDispatcher

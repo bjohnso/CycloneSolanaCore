@@ -1,7 +1,7 @@
 package com.cyclone.solana.core.crypto
 
 import com.cyclone.solana.core.constants.Address
-import com.cyclone.solana.core.datamodel.dto.metaplex.MetaData
+import com.cyclone.solana.core.datamodel.dto.metaplex.account_info.MetaplexAccountInfo
 import com.cyclone.solana.core.encryption.derivation.Derivation
 import com.cyclone.solana.core.extensions.base58ToByteArray
 import com.cyclone.solana.core.extensions.toBase58
@@ -46,8 +46,8 @@ class NFTTest {
         }
 
         val expectedJson = "{\"updateAuthority\":\"DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D\",\"mint\":\"4siT7XaV5xz6d1ArAy4ma8SkNRUhsrCQxjw9BpB8PfTK\",\"data\":{\"name\":\"Sol Otters #7\",\"symbol\":\"OTTER\",\"uri\":\"https://arweave.net/e3Z0vssFdo7jSS7879q3w_-S14kNofs9t9X7jcGxCg8\",\"sellerFeeBasisPoints\":1000,\"creators\":[{\"address\":\"Dbny5adAUUGWcecdbRXuND8SA6XXhQKUeqWRyjJk1B3C\",\"verified\":true,\"share\":0},{\"address\":\"DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D\",\"verified\":false,\"share\":100}]},\"primarySaleHappened\":false,\"isMutable\":true}"
-        val expectedMetaData = json.decodeFromString<MetaData>(expectedJson)
+        val expectedMetaplexAccountInfo = json.decodeFromString<MetaplexAccountInfo>(expectedJson)
 
-        Assert.assertEquals(expectedMetaData, metaData)
+        Assert.assertEquals(expectedMetaplexAccountInfo, metaData)
     }
 }

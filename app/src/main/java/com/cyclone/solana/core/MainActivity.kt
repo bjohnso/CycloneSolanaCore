@@ -5,26 +5,35 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.cyclone.solana.core.constants.Unit
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.result.Result
-import com.cyclone.solana.core.datamodel.dto.solanaRPC.result.account_info.AccountInfo
 import com.cyclone.solana.core.extensions.toBase58
 import com.cyclone.solana.core.network.NetworkResource
-import com.cyclone.solana.core.network.api.SolanaRpcApi
+import com.cyclone.solana.core.network.api.NFTApi
+import com.cyclone.solana.core.network.api.SolanaRPCApi
 import com.cyclone.solana.core.network.factory.HttpClientFactory
+import com.cyclone.solana.core.parser.metaplex.MetaplexParser
+import com.cyclone.solana.core.repository.implementation.NFTRepositoryImpl
 import com.cyclone.solana.core.repository.implementation.SolanaRpcApiRepositoryImpl
 import com.cyclone.solana.core.usecase.Base58Decoder
+import com.cyclone.solana.core.usecase.MetaplexPDADeriver
 import com.cyclone.solana.core.usecase.SolTransferTransaction
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 class MainActivity: AppCompatActivity() {
 
     val client = HttpClientFactory().createOkHttpClient("https://api.devnet.solana.com/")
-    val api = SolanaRpcApi(client)
+    val clientNFT = HttpClientFactory().createOkHttpClient()
+    val api = SolanaRPCApi(client)
+    val nftApi = NFTApi(clientNFT)
     val repo = SolanaRpcApiRepositoryImpl(api)
+    val nftRepo = NFTRepositoryImpl(nftApi)
 
+    @OptIn(ExperimentalEncodingApi::class)
     override fun onStart() {
         super.onStart()
         lifecycleScope.launch {
@@ -47,6 +56,8 @@ class MainActivity: AppCompatActivity() {
             val blockhash = "3dzVXVEaNasfNTJHNimL2YE4piGWwCanBtnPcQ6J44z1"
             val lamports = Unit.Units.LAMPORTS_PER_SOL / 10
 
+            val nftOwner = "AQgMCXr8gcbjKmiB525YzcqQdVEZtAYVeBDWyDEBg9Z3"
+
             val transaction = SolTransferTransaction.invoke(
                 fromAddress,
                 toAddress,
@@ -59,20 +70,62 @@ class MainActivity: AppCompatActivity() {
 
             val tx = "5JtwPkazZpmm8Q39cdY7MgWKZDsL356KTXUfcuQFfuvxonDgXscfXuhnQ5AonCzZDY3smRpZQ3H81YNyH6pBMH7H"
 
+            val metaplexPDA = "FWxGAqf4SRnThuio5DFpKArAD4vS75XDj1j3vxL8GJWr"
+
             repo.getAccountInfo(
-                "E8qML25hDPZ1XWv9MP3pQ28dzY5oUmbbHUXVRoDuduUg"
+                metaplexPDA
             ).collectLatest {
                 when (it) {
                     is NetworkResource.Success -> {
-                        val result = when (val res = it.result.result) {
-                            is Result.GetBalanceResult -> res.getBalanceResult
-                            is Result.GetLatestBlockhashResult-> res.getLatestBlockhashResult
-                            is Result.SendTransactionResult -> res.sendTransactionResult
-                            is Result.GetTransactionResult -> res.getTransactionResult
-                            is Result.GetTokenAccountsByOwnerResult -> res.getTokenAccountsByOwnerResult
-                            is Result.GetAccountInfoResult -> res.getAccountInfoResult
+                        var result: Any? = null
+
+                        when (val res = it.result.result) {
+                            is Result.GetBalanceResult -> {
+                                result = res.getBalanceResult
+                            }
+                            is Result.GetLatestBlockhashResult-> {
+                                result = res.getLatestBlockhashResult
+                            }
+                            is Result.SendTransactionResult -> {
+                                result = res.sendTransactionResult
+                            }
+                            is Result.GetTransactionResult -> {
+                                result = res.getTransactionResult
+                            }
+                            is Result.GetTokenAccountsByOwnerResult -> {
+                                result = res.getTokenAccountsByOwnerResult
+
+                                val mint = res.getTokenAccountsByOwnerResult.firstOrNull()?.account?.data?.parsed?.info?.mint
+
+                                val (pda, bump) = MetaplexPDADeriver.invoke(mint!!)
+
+                                val pdaAddress = pda.toBase58()
+
+                                Log.e("TEST_ME", "PDA: $pdaAddress - $bump")
+                            }
+                            is Result.GetAccountInfoResult -> {
+                                result = res.getAccountInfoResult
+
+                                val parsedMetaDataAccount = MetaplexParser.unpackMetadataAccount(
+                                    Base64.decode(res.getAccountInfoResult.data!!.first())
+                                )
+
+                                Log.e("TEST_ME", "Parsed: $parsedMetaDataAccount")
+
+                                nftRepo.getNFTMetaData(parsedMetaDataAccount.data.uri).collectLatest {
+                                    when (it) {
+                                        is NetworkResource.Success -> {
+                                            Log.e("TEST_ME", "NFT: ${it.result}")
+                                        }
+                                        else -> {
+                                            Log.e("TEST_ME", "NFT: OOPS")
+                                        }
+                                    }
+                                }
+                            }
                             else -> null
                         }
+
                         Log.e("TEST_ME", "Success: $result")
                     }
                     is NetworkResource.Error -> {

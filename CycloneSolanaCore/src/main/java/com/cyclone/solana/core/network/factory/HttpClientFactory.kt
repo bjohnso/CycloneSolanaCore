@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 class HttpClientFactory {
     fun createOkHttpClient(
-        host: String,
+        host: String? = null,
         connectTimeoutMillis: Long? = null,
         readTimeoutMillis: Long? = null
     ) = HttpClient(OkHttp) {
@@ -55,7 +55,9 @@ class HttpClientFactory {
         }
 
         install(DefaultRequest) {
-            url(host)
+            host?.let {
+                url(host)
+            }
             header(HttpClientHeaders.CONTENT_TYPE, ContentType.Application.Json)
         }
     }

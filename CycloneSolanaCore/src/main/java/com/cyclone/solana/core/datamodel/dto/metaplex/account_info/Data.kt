@@ -1,4 +1,4 @@
-package com.cyclone.solana.core.datamodel.dto.metaplex
+package com.cyclone.solana.core.datamodel.dto.metaplex.account_info
 
 import kotlinx.serialization.Serializable
 

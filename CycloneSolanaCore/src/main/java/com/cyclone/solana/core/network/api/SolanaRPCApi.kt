@@ -5,7 +5,7 @@ import com.cyclone.solana.core.datamodel.dto.solanaRPC.response.RPCResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 
-class SolanaRpcApi(private val client: HttpClient) {
+class SolanaRPCApi(private val client: HttpClient) {
     suspend fun getBalance(
         body: RPCRequest.RequestBalance
     ): RPCResponse.Response = client.post("/") {

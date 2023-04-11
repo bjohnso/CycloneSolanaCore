@@ -3,13 +3,13 @@ package com.cyclone.solana.core.repository.implementation
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.request.RPCRequest
 import com.cyclone.solana.core.datamodel.dto.solanaRPC.response.RPCResponse
 import com.cyclone.solana.core.network.NetworkResource
-import com.cyclone.solana.core.network.api.SolanaRpcApi
+import com.cyclone.solana.core.network.api.SolanaRPCApi
 import com.cyclone.solana.core.repository.interfaces.SolanaRPCRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SolanaRpcApiRepositoryImpl(private val solanaRpcApi: SolanaRpcApi): SolanaRPCRepository {
+class SolanaRpcApiRepositoryImpl(private val solanaRpcApi: SolanaRPCApi): SolanaRPCRepository {
     override suspend fun getBalance(
         address: String
     ): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>> = flow {

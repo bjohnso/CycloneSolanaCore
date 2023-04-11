@@ -1,9 +1,9 @@
-package com.cyclone.solana.core.datamodel.dto.metaplex
+package com.cyclone.solana.core.datamodel.dto.metaplex.account_info
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MetaData constructor(
+data class MetaplexAccountInfo constructor(
     val updateAuthority: String,
     val mint: String,
     val data: Data,

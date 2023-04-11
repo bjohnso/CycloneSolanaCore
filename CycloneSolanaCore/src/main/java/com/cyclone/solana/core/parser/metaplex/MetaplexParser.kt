@@ -1,14 +1,14 @@
 package com.cyclone.solana.core.parser.metaplex
 
-import com.cyclone.solana.core.datamodel.dto.metaplex.Creator
-import com.cyclone.solana.core.datamodel.dto.metaplex.Data
-import com.cyclone.solana.core.datamodel.dto.metaplex.MetaData
+import com.cyclone.solana.core.datamodel.dto.metaplex.account_info.Creator
+import com.cyclone.solana.core.datamodel.dto.metaplex.account_info.Data
+import com.cyclone.solana.core.datamodel.dto.metaplex.account_info.MetaplexAccountInfo
 import com.cyclone.solana.core.extensions.toBase58
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 object MetaplexParser {
-    fun unpackMetadataAccount(data: ByteArray): MetaData {
+    fun unpackMetadataAccount(data: ByteArray): MetaplexAccountInfo {
         require(data[0].toInt() == 4)
         val buffer = ByteBuffer.wrap(data).apply { position(1) }
 
@@ -49,7 +49,7 @@ object MetaplexParser {
         val primarySaleHappened = buffer.get().toInt() != 0
         val isMutable = buffer.get().toInt() != 0
 
-        return MetaData(
+        return MetaplexAccountInfo(
             updateAuthority = sourceAccount.toBase58(),
             mint = mintAccount.toBase58(),
             data = Data(

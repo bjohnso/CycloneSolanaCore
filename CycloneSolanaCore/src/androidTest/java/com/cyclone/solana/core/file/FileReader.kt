@@ -4,6 +4,7 @@ import java.io.InputStreamReader
 
 class FileReader {
     object FileResource {
+        /* RPC */
         const val getLatestBlockHash = "solanaRPC/get_latest_blockhash.json"
         const val getLatestBlockHashError = "solanaRPC/get_latest_blockhash_error.json"
         const val getBalance = "solanaRPC/get_balance.json"
@@ -16,6 +17,9 @@ class FileReader {
         const val getTokenAccountsByOwnerError = "solanaRPC/get_token_accounts_by_owner_error.json"
         const val getAccountInfo = "solanaRPC/get_account_info.json"
         const val getAccountInfoError = "solanaRPC/get_account_info_error.json"
+
+        /* NFT */
+        const val getNFTMetaData = "solanaNFT/get_nft_meta_data.json"
     }
 
     fun readJsonFile(fileName: String): String {

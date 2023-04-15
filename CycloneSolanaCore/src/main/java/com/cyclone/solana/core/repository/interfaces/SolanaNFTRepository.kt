@@ -4,6 +4,6 @@ import com.cyclone.solana.core.datamodel.dto.metaplex.meta_data.MetaplexMetaData
 import com.cyclone.solana.core.network.NetworkResource
 import kotlinx.coroutines.flow.Flow
 
-interface NFTRepository {
+interface SolanaNFTRepository {
     suspend fun getNFTMetaData(url: String): Flow<NetworkResource<MetaplexMetaData, Nothing>>
 }

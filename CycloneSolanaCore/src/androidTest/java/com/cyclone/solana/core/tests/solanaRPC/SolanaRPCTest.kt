@@ -7,7 +7,7 @@ import com.cyclone.solana.core.http.client.MockHttpClientFactoryImpl
 import com.cyclone.solana.core.http.dispatcher.*
 import com.cyclone.solana.core.network.NetworkResource
 import com.cyclone.solana.core.network.api.SolanaRPCApi
-import com.cyclone.solana.core.repository.implementation.SolanaRpcApiRepositoryImpl
+import com.cyclone.solana.core.repository.implementation.SolanaRPCApiRepositoryImpl
 import com.cyclone.solana.core.repository.interfaces.SolanaRPCRepository
 import com.cyclone.solana.core.usecase.Base58Decoder
 import com.cyclone.solana.core.usecase.Base58Encoder
@@ -31,7 +31,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -77,7 +77,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -113,7 +113,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -155,7 +155,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -193,7 +193,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -262,7 +262,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -327,7 +327,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -371,7 +371,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -409,7 +409,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -468,7 +468,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -506,7 +506,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
@@ -560,7 +560,7 @@ class SolanaRPCTest {
             ).createOkHttpClient()
         )
 
-        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+        solanaRPCRepository = SolanaRPCApiRepositoryImpl(solanaRPCApi)
 
         val emissions =
             mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()

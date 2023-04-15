@@ -9,7 +9,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SolanaRpcApiRepositoryImpl(private val solanaRpcApi: SolanaRPCApi): SolanaRPCRepository {
+class SolanaRPCApiRepositoryImpl(private val solanaRpcApi: SolanaRPCApi): SolanaRPCRepository {
     override suspend fun getBalance(
         address: String
     ): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>> = flow {

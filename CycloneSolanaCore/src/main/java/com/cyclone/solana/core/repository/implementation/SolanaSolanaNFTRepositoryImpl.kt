@@ -2,15 +2,14 @@ package com.cyclone.solana.core.repository.implementation
 
 import android.util.Log
 import com.cyclone.solana.core.datamodel.dto.metaplex.meta_data.MetaplexMetaData
-import com.cyclone.solana.core.datamodel.dto.solanaRPC.response.RPCResponse
 import com.cyclone.solana.core.network.NetworkResource
-import com.cyclone.solana.core.network.api.NFTApi
-import com.cyclone.solana.core.repository.interfaces.NFTRepository
+import com.cyclone.solana.core.network.api.SolanaNFTApi
+import com.cyclone.solana.core.repository.interfaces.SolanaNFTRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class NFTRepositoryImpl(private val nftApi: NFTApi): NFTRepository {
+class SolanaSolanaNFTRepositoryImpl(private val solanaNftApi: SolanaNFTApi): SolanaNFTRepository {
     override suspend fun getNFTMetaData(url: String): Flow<NetworkResource<MetaplexMetaData, Nothing>> {
         return flow {
             emit(
@@ -22,7 +21,7 @@ class NFTRepositoryImpl(private val nftApi: NFTApi): NFTRepository {
                 Log.e("TEST_ME", "getNFTMetaData: $url")
 
                 emit(
-                    NetworkResource.Success(nftApi.getNFTMetaData(url))
+                    NetworkResource.Success(solanaNftApi.getNFTMetaData(url))
                 )
 
                 return@flow

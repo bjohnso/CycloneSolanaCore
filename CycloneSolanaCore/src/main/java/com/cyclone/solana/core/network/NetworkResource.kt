@@ -10,9 +10,5 @@ sealed class NetworkResource<out R : Any, out E: Any?> {
     data class Success<out R : Any>(
         val result: R
     ) : NetworkResource<R, Nothing>()
-    
-    data class Cached<out R: Any>(
-        val result: R
-    ) : NetworkResource<R, Nothing>()
 }
 

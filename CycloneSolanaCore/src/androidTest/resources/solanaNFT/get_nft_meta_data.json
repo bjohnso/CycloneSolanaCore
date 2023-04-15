@@ -1,0 +1,15 @@
+{
+  "name": "Sol Otters #7",
+  "symbol": "OTTER",
+  "description": "#7 of Solana Otters NFT Collection.",
+  "image": "https://arweave.net/oJne_596sVqQsEwZum2IHfMEfmwUT_wvhthLsCU_0Tk?ext=png",
+  "properties": {
+    "files": [
+      {
+        "uri": "",
+        "type": "image/png"
+      }
+    ],
+    "category": "image"
+  }
+}

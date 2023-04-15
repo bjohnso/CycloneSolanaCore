@@ -1,8 +1,9 @@
 package com.cyclone.solana.core.extensions
 
+import com.cyclone.solana.core.usecase.Base58Encoder
 import java.math.BigInteger
 
-fun ByteArray.toInteger() = BigInteger(this).toInt()
+fun ByteArray.toBigInteger() = BigInteger(1, this)
 
 fun ByteArray.toBinaryString(): String = BigInteger(1, this).toString(2)
 
@@ -49,4 +50,8 @@ fun ByteArray.removeLeadingZeros(): ByteArray {
         i++
     }
     return this.copyOfRange(i, this.size)
+}
+
+fun ByteArray.toBase58(): String {
+    return Base58Encoder.invoke(this)
 }

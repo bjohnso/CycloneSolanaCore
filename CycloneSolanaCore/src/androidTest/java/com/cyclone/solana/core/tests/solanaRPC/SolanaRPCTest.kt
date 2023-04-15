@@ -24,7 +24,7 @@ class SolanaRPCTest {
     private lateinit var solanaRPCRepository: SolanaRPCRepository
 
     @Test
-    fun get_blockhash_is_correct() {
+    fun get_blockhash_did_succeed() {
         solanaRPCApi = SolanaRPCApi(
             MockHttpClientFactoryImpl(
                 GetLatestBlockhashRequestHandler.getSuccessResponse()
@@ -70,7 +70,7 @@ class SolanaRPCTest {
     }
 
     @Test
-    fun get_blockhash_is_error() {
+    fun get_blockhash_did_error() {
         solanaRPCApi = SolanaRPCApi(
             MockHttpClientFactoryImpl(
                 GetLatestBlockhashRequestHandler.getErrorResponse()
@@ -106,7 +106,7 @@ class SolanaRPCTest {
     }
 
     @Test
-    fun get_balance_is_correct() {
+    fun get_balance_did_succeed() {
         solanaRPCApi = SolanaRPCApi(
             MockHttpClientFactoryImpl(
                 GetBalanceRequestHandler.getSuccessResponse()
@@ -148,7 +148,7 @@ class SolanaRPCTest {
     }
 
     @Test
-    fun get_balance_is_error() {
+    fun get_balance_did_error() {
         solanaRPCApi = SolanaRPCApi(
             MockHttpClientFactoryImpl(
                 GetBalanceRequestHandler.getErrorResponse()
@@ -186,7 +186,7 @@ class SolanaRPCTest {
     }
 
     @Test
-    fun send_lamports_did_succeed() {
+    fun send_transaction_did_succeed() {
         solanaRPCApi = SolanaRPCApi(
             MockHttpClientFactoryImpl(
                 SendTransactionRequestHandler.getSuccessResponse()
@@ -255,7 +255,7 @@ class SolanaRPCTest {
     }
 
     @Test
-    fun send_lamports_did_error() {
+    fun send_transaction_did_error() {
         solanaRPCApi = SolanaRPCApi(
             MockHttpClientFactoryImpl(
                 SendTransactionRequestHandler.getErrorResponse()
@@ -364,7 +364,7 @@ class SolanaRPCTest {
     }
 
     @Test
-    fun get_transaction_did_not_succeed() {
+    fun get_transaction_did_error() {
         solanaRPCApi = SolanaRPCApi(
             MockHttpClientFactoryImpl(
                 GetTransactionRequestHandler.getErrorResponse()
@@ -379,6 +379,195 @@ class SolanaRPCTest {
         runBlocking {
             solanaRPCRepository.getTransaction(
                 transactionSignature = "2cDhsuZKVJoKCtDAtKGDD473yzodmGs9pRBu4TpD7Sp18FuPj5Zk1NKz3Dfk5GuDcQenRwLwBYAMExFjebYs48K2",
+            ).collect {
+                emissions.add(it)
+            }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Error)
+
+        val error = emissions[1] as NetworkResource.Error
+        val responseErrorCode = error.error?.error?.code
+
+        assertEquals(
+            -32602,
+            responseErrorCode
+        )
+    }
+
+    @Test
+    fun get_token_accounts_by_owner_did_succeed() {
+        solanaRPCApi = SolanaRPCApi(
+            MockHttpClientFactoryImpl(
+                GetTokenAccountsByOwnerRequestHandler.getSuccessResponse()
+            ).createOkHttpClient()
+        )
+
+        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        runBlocking {
+            solanaRPCRepository
+                .getTokenAccountsByOwner(
+                    address = "AQgMCXr8gcbjKmiB525YzcqQdVEZtAYVeBDWyDEBg9Z3"
+                )
+                .collect {
+                    emissions.add(it)
+                }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Success)
+
+        val success = emissions[1] as NetworkResource.Success
+
+        assertTrue(success.result.result is Result.GetTokenAccountsByOwnerResult)
+
+        val result = success.result.result as Result.GetTokenAccountsByOwnerResult
+        val tokenAccounts = result.getTokenAccountsByOwnerResult
+
+        assertEquals(
+            1,
+            tokenAccounts.size
+        )
+
+        assertEquals(
+            "4siT7XaV5xz6d1ArAy4ma8SkNRUhsrCQxjw9BpB8PfTK",
+            tokenAccounts.firstOrNull()?.account?.data?.parsed?.info?.mint
+        )
+
+        assertEquals(
+            "AQgMCXr8gcbjKmiB525YzcqQdVEZtAYVeBDWyDEBg9Z3",
+            tokenAccounts.firstOrNull()?.account?.data?.parsed?.info?.owner
+        )
+
+        assertEquals(
+            "E8qML25hDPZ1XWv9MP3pQ28dzY5oUmbbHUXVRoDuduUg",
+            tokenAccounts.firstOrNull()?.pubkey
+        )
+    }
+
+    @Test
+    fun get_token_accounts_by_owner_did_error() {
+        solanaRPCApi = SolanaRPCApi(
+            MockHttpClientFactoryImpl(
+                GetTokenAccountsByOwnerRequestHandler.getErrorResponse()
+            ).createOkHttpClient()
+        )
+
+        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        runBlocking {
+            solanaRPCRepository.getTokenAccountsByOwner(
+                address = "AQgMCXr8gcbjKmiB525YzcqQdVEZtAYVeBDWyDEBg9Z3"
+            ).collect {
+                emissions.add(it)
+            }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Error)
+
+        val error = emissions[1] as NetworkResource.Error
+        val responseErrorCode = error.error?.error?.code
+
+        assertEquals(
+            -32602,
+            responseErrorCode
+        )
+    }
+
+    @Test
+    fun get_account_info_did_succeed() {
+        solanaRPCApi = SolanaRPCApi(
+            MockHttpClientFactoryImpl(
+                GetAccountInfoRequestHandler.getSuccessResponse()
+            ).createOkHttpClient()
+        )
+
+        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        runBlocking {
+            solanaRPCRepository
+                .getAccountInfo(
+                    address = "E8qML25hDPZ1XWv9MP3pQ28dzY5oUmbbHUXVRoDuduUg"
+                )
+                .collect {
+                    emissions.add(it)
+                }
+        }
+
+        assertEquals(2, emissions.size)
+
+        assertNotNull(emissions[0])
+        assertNotNull(emissions[1])
+
+        assertTrue(emissions[0] is NetworkResource.Loading)
+        assertTrue(emissions[1] is NetworkResource.Success)
+
+        val success = emissions[1] as NetworkResource.Success
+
+        assertTrue(success.result.result is Result.GetAccountInfoResult)
+
+        val result = success.result.result as Result.GetAccountInfoResult
+        val accountInfo = result.getAccountInfoResult
+
+        assertEquals(
+            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+            accountInfo.owner
+        )
+
+        assertEquals(
+            "OZD4GarKfuP80i1oVZ+uPPsiSLQum2MYash6e/sezy6Lygg7qRgpImK0ZuDjFIiW7iDjlcjbXakQr+qSUgkkOgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            accountInfo.data?.first()
+        )
+
+        assertEquals(
+            "base64",
+            accountInfo.data?.last()
+        )
+    }
+
+    @Test
+    fun get_account_info_did_error() {
+        solanaRPCApi = SolanaRPCApi(
+            MockHttpClientFactoryImpl(
+                GetAccountInfoRequestHandler.getErrorResponse()
+            ).createOkHttpClient()
+        )
+
+        solanaRPCRepository = SolanaRpcApiRepositoryImpl(solanaRPCApi)
+
+        val emissions =
+            mutableListOf<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>>()
+
+        runBlocking {
+            solanaRPCRepository.getAccountInfo(
+                address = "E8qML25hDPZ1XWv9MP3pQ28dzY5oUmbbHUXVRoDuduUg"
             ).collect {
                 emissions.add(it)
             }

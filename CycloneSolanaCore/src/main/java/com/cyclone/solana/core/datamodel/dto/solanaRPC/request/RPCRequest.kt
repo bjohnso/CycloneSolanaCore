@@ -11,7 +11,7 @@ import kotlinx.serialization.json.JsonPrimitive
 @Keep
 sealed class RPCRequest {
     @Serializable
-    data class RequestBalance(
+    data class RequestGetBalance(
         @Transient val address: String = "",
         val jsonrpc: String = "2.0",
     ) {

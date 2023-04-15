@@ -12,7 +12,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
-class NFTTest {
+class NFTUnitTest {
     @Test
     fun `derive metaplex pda`() {
         val metaDataSeed = "metadata"

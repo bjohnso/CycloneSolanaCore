@@ -9,7 +9,7 @@ import com.cyclone.solana.core.extensions.toBase58
 import com.cyclone.solana.core.network.NetworkResource
 import com.cyclone.solana.core.network.api.NFTApi
 import com.cyclone.solana.core.network.api.SolanaRPCApi
-import com.cyclone.solana.core.network.factory.HttpClientFactory
+import com.cyclone.solana.core.network.factory.HttpClientFactoryImpl
 import com.cyclone.solana.core.parser.metaplex.MetaplexParser
 import com.cyclone.solana.core.repository.implementation.NFTRepositoryImpl
 import com.cyclone.solana.core.repository.implementation.SolanaRpcApiRepositoryImpl
@@ -24,16 +24,16 @@ import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+@OptIn(ExperimentalEncodingApi::class)
 class MainActivity: AppCompatActivity() {
 
-    val client = HttpClientFactory().createOkHttpClient("https://api.devnet.solana.com/")
-    val clientNFT = HttpClientFactory().createOkHttpClient()
+    val client = HttpClientFactoryImpl().createOkHttpClient("https://api.devnet.solana.com/")
+    val clientNFT = HttpClientFactoryImpl().createOkHttpClient()
     val api = SolanaRPCApi(client)
     val nftApi = NFTApi(clientNFT)
     val repo = SolanaRpcApiRepositoryImpl(api)
     val nftRepo = NFTRepositoryImpl(nftApi)
 
-    @OptIn(ExperimentalEncodingApi::class)
     override fun onStart() {
         super.onStart()
         lifecycleScope.launch {

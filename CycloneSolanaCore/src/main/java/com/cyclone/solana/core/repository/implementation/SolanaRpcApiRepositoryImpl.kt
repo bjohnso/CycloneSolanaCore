@@ -13,7 +13,7 @@ class SolanaRpcApiRepositoryImpl(private val solanaRpcApi: SolanaRPCApi): Solana
     override suspend fun getBalance(
         address: String
     ): Flow<NetworkResource<RPCResponse.SuccessResponse, RPCResponse.ErrorResponse>> = flow {
-        val rpcRequest = RPCRequest.RequestBalance(address = address)
+        val rpcRequest = RPCRequest.RequestGetBalance(address = address)
         emit(
             NetworkResource.Loading
         )
@@ -72,7 +72,11 @@ class SolanaRpcApiRepositoryImpl(private val solanaRpcApi: SolanaRPCApi): Solana
             }
         }
         catch (c: CancellationException) { throw c }
-        catch (e: Exception) { /* Ignore */ }
+        catch (e: Exception) {
+            println(
+                "getLatestBlockHash: ${e.message}"
+            )
+        }
 
         emit(
             NetworkResource.Error(null)

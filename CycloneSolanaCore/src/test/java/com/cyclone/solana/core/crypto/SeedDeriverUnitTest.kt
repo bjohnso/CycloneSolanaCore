@@ -30,6 +30,30 @@ class SeedDeriverUnitTest {
     }
 
     @Test
+    fun `phrase to seed is incorrect`() {
+        val phrase = listOf(
+            "comc",
+            "sphere",
+            "unaware",
+            "spreme",
+            "lel",
+            "shaow",
+            "figer",
+            "aim",
+            "chimey",
+            "aution",
+            "brave",
+            "aler"
+        )
+
+        Assert.assertThrows(
+            AssertionError::class.java
+        ) {
+            Derivation.generateDerivationSeed(phrase)
+        }
+    }
+
+    @Test
     fun `seed to master extended secret key is correct`() {
         val seed = "5f0a5d2213ae6ca550494c9bb96e6711fe9dd722bb79293e3c700c309aaa11285176cedad042b80dc1db570c46e7a08bc5b378308349ae1aeb444cb610eec2fa".hexToByteArray()
 

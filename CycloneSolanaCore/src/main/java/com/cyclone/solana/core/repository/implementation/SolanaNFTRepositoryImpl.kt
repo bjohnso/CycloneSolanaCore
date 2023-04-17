@@ -9,7 +9,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SolanaSolanaNFTRepositoryImpl(private val solanaNftApi: SolanaNFTApi): SolanaNFTRepository {
+class SolanaNFTRepositoryImpl(private val solanaNftApi: SolanaNFTApi): SolanaNFTRepository {
     override suspend fun getNFTMetaData(url: String): Flow<NetworkResource<MetaplexMetaData, Nothing>> {
         return flow {
             emit(

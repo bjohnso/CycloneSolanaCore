@@ -1,4 +1,4 @@
-package com.cyclone.solana.core
+package com.cyclone.solana.app
 
 import org.junit.Test
 

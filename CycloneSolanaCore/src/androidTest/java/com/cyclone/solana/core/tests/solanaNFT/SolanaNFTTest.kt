@@ -5,7 +5,7 @@ import com.cyclone.solana.core.http.client.MockHttpClientFactoryImpl
 import com.cyclone.solana.core.http.dispatcher.GetNFTMetaDataRequestHandler
 import com.cyclone.solana.core.network.NetworkResource
 import com.cyclone.solana.core.network.api.SolanaNFTApi
-import com.cyclone.solana.core.repository.implementation.SolanaSolanaNFTRepositoryImpl
+import com.cyclone.solana.core.repository.implementation.SolanaNFTRepositoryImpl
 import com.cyclone.solana.core.repository.interfaces.SolanaNFTRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -23,7 +23,7 @@ class SolanaNFTTest {
             ).createOkHttpClient()
         )
 
-        solanaNFTRepository = SolanaSolanaNFTRepositoryImpl(solanaNFTApi)
+        solanaNFTRepository = SolanaNFTRepositoryImpl(solanaNFTApi)
 
         val emissions =
             mutableListOf<NetworkResource<MetaplexMetaData, Nothing>>()
@@ -79,7 +79,7 @@ class SolanaNFTTest {
             ).createOkHttpClient()
         )
 
-        solanaNFTRepository = SolanaSolanaNFTRepositoryImpl(solanaNFTApi)
+        solanaNFTRepository = SolanaNFTRepositoryImpl(solanaNFTApi)
 
         val emissions =
             mutableListOf<NetworkResource<MetaplexMetaData, Nothing>>()

@@ -60,4 +60,28 @@ class MnemonicUnitTest {
 
         assertArrayEquals(expected, result)
     }
+
+    @Test
+    fun decode_from_12_word_mnemonic_is_incorrect() {
+        val expected = null
+
+        val result = MnemonicDecoder.invoke(
+            listOf(
+                "comc",
+                "sphere",
+                "unaware",
+                "spreme",
+                "lel",
+                "shaow",
+                "figer",
+                "aim",
+                "chimey",
+                "aution",
+                "brave",
+                "aler"
+            )
+        )
+
+        assertArrayEquals(expected, result)
+    }
 }

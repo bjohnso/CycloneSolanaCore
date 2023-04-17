@@ -1,6 +1,7 @@
 package com.cyclone.solana.core.network.factory
 
 import android.util.Log
+import com.cyclone.solana.core.BuildConfig
 import com.cyclone.solana.core.network.constants.HttpClientHeaders
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
@@ -44,7 +45,8 @@ class HttpClientFactoryImpl: HttpClientFactory {
         install(Logging) {
             logger = object: Logger {
                 override fun log(message: String) {
-                    Log.v("Ktor", message)
+                    if (BuildConfig.DEBUG)
+                        Log.v("Ktor", message)
                 }
             }
             level = LogLevel.ALL
@@ -52,7 +54,8 @@ class HttpClientFactoryImpl: HttpClientFactory {
 
         install(ResponseObserver) {
             onResponse { response ->
-                Log.v("Ktor", "Response: ${response.status.value}")
+                if (BuildConfig.DEBUG)
+                    Log.v("Ktor", "Response: ${response.status.value}")
             }
         }
 

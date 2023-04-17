@@ -1,19 +1,11 @@
-# Retrofit
--keep class retrofit2.** { *; }
--keepattributes Signature
--keepattributes Exceptions
--keepattributes *Annotation*
+-keep class com.cyclone.solana.core.** { *; }
 
--keepclasseswithmembers class * {
-    @retrofit2.http.* <methods>;
+##---------------Begin: proguard configuration for sqlcipher  ----------
+
+-keep class net.sqlcipher.** {
+    *;
 }
 
-# Gson
--keep class com.google.gson.** { *; }
--keepattributes Signature
--keep class com.cyclone.solana.core.datamodel.** { *; }
+-dontwarn net.sqlcipher.**
 
-# Prevent Gson from getting optimized
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
+##---------------End: proguard configuration for sqlcipher  ----------

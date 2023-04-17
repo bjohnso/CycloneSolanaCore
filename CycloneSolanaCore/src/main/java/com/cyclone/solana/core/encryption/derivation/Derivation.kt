@@ -3,8 +3,7 @@ package com.cyclone.solana.core.encryption.derivation
 import com.cyclone.solana.core.encryption.ExtendedSecretKey
 import com.cyclone.solana.core.encryption.Utils
 import com.cyclone.solana.core.extensions.base58ToByteArray
-import com.cyclone.solana.core.extensions.binaryToHex
-import com.cyclone.solana.core.extensions.toBinaryString
+import com.cyclone.solana.core.usecase.MnemonicDecoder
 import net.i2p.crypto.eddsa.math.GroupElement
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable
 import org.bouncycastle.crypto.digests.SHA512Digest
@@ -13,11 +12,14 @@ import org.bouncycastle.crypto.params.KeyParameter
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
-import org.bouncycastle.math.ec.rfc8032.Ed25519
-import java.util.Arrays
 
 object Derivation {
+    @kotlin.jvm.Throws(AssertionError::class)
     fun generateDerivationSeed(mnemonic: List<String>, passphrase: String = ""): ByteArray {
+        assert(MnemonicDecoder.invoke(mnemonic) != null) {
+            "Invalid mnemonic"
+        }
+
         val mnemonicStr = mnemonic.joinToString(" ")
         val salt = "mnemonic$passphrase"
 
@@ -31,6 +33,7 @@ object Derivation {
         return (generator.generateDerivedParameters(512) as KeyParameter).key
     }
 
+    @kotlin.jvm.Throws(AssertionError::class)
     fun generateMasterExtendSecretKey(seed: ByteArray): ExtendedSecretKey {
         assert(seed.size == 64) {
             "Invalid seed length"
@@ -48,6 +51,7 @@ object Derivation {
         )
     }
 
+    @kotlin.jvm.Throws(IllegalStateException::class)
     fun findProgramAddress(seeds: List<ByteArray>, programId: String): Pair<ByteArray, Int> {
         var nonce = 255
         var address: ByteArray
@@ -65,7 +69,7 @@ object Derivation {
         throw IllegalStateException("Unable to find a viable program address nonce")
     }
 
-
+    @kotlin.jvm.Throws(IllegalStateException::class)
     fun createProgramAddress(seeds: List<ByteArray>, programId: String): ByteArray {
         val programIdBytes = programId.base58ToByteArray()
         val programDerivedAddressLiteral = "ProgramDerivedAddress".toByteArray()

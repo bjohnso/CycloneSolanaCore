@@ -38,7 +38,7 @@ class SolTransferTransactionUnitTest {
     @Test
     fun signed_sol_transfer_transaction_correct() {
         val expectedSigned = Base58Decoder.invoke(
-            "4q6hftAxkbmYue47iaGbyAepZwSXxWut83hwnMkQjgFYCb6n6z58rNKt4V4Gv6cLw5c5qQR9j3DH5xYgWYpbfVZEA6CpvP6zm8FeanzQaVURU2wtgpoxbArnzSf1h6ZU5yXx1pt566eud5RE5SnYoxmMQGbPVq4J4pyec851vNRAukrtgrPAohjQhz7i4vEaUfVDKNi5cTM9TxXM7atRGxBJcxK5Txugh2Zi5eSR7UqUAMHb9FPqjroiDVEhkQMDKsBu7ZxdyyH8qhtnToz3SkJfThPCsHh5fb9y1"
+            "5N4f7CayFbX4XNZK9C4dZpmAGZiuMNtWELJHhwGn1ttZh6oWWYHsWdNgfx4LWHQhMtnEmXvAvTucmVaGKvaHxQFNQNoaJev99gNSACu6ukMbHktHHAQ4EWMgYvxdnjDkjR4Hrh97Auhbx1npCQAjFmBvsaLUgxwcmjd7uzftnm5P8CctSmyU22SBvAe2CuzZAC447ZpqDxhBq5gUumAxsmLRsW9PABznD88zquP2y5Kka1oPnvhdoBfFB9n9eP7T4uUgsbYS4E2KphUgCDAr9WMqXHMa8w9gsNrL7"
         )
 
         val publicKeyParameters = Ed25519PublicKeyParameters(

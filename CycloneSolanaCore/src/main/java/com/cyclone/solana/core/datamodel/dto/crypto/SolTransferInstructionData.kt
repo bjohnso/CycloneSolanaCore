@@ -7,7 +7,7 @@ import com.cyclone.solana.core.datamodel.interfaces.crypto.InstructionData
 import com.cyclone.solana.core.usecase.CompactArrayEncoder
 
 @Keep
-data class TransferInstructionData(val lamports: Int): InstructionData {
+data class SolTransferInstructionData(private val lamports: Long): InstructionData {
     override fun serialise(): ByteArray {
         val functionIndexBytes = SystemProgram.Enums.TRANSFER
             .toLEByteArray(4) /* u32 */

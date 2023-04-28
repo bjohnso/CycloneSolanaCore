@@ -1,15 +1,15 @@
 package com.cyclone.solana.core.usecase
 
 import com.cyclone.solana.core.constants.Address
-import com.cyclone.solana.core.constants.SystemProgram
 import com.cyclone.solana.core.datamodel.dto.crypto.*
 
-object SolTransferTransaction {
+object SPLTokenTransferTransaction {
     operator fun invoke(
-        fromAddress: String,
-        toAddress: String,
+        sourceAddress: String, // SPL token account address
+        destinationAddress: String, // SPL token account address
+        ownerAddress: String, // SPL token owner address
         blockhash: String,
-        lamports: Long
+        tokenAmount: Long
     ): Transaction {
         val header = Header(
             noSigs = 1,
@@ -18,17 +18,18 @@ object SolTransferTransaction {
         )
 
         val instruction = TransferInstruction(
-            programIdIndex = 2,
-            accountIndices = listOf(0, 1),
-            data = SolTransferInstructionData(lamports = lamports)
+            programIdIndex = 3,
+            accountIndices = listOf(1, 2, 0),
+            data = SPLTokenTransferInstructionData(amount = tokenAmount)
         )
 
         val message = Message(
             header = header,
             accountAddresses = listOf(
-                fromAddress,
-                toAddress,
-                Address.ProgramAddresses.SYSTEM_PROGRAM,
+                ownerAddress,
+                sourceAddress,
+                destinationAddress,
+                Address.ProgramAddresses.TOKEN_PROGRAM,
             ),
             blockhash = blockhash,
             instructions = listOf(instruction)

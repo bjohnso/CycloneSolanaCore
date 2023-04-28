@@ -23,6 +23,21 @@ fun Int.toBEByteArray(byteSize: Int): ByteArray {
         .array()
 }
 
+fun Long.toLEByteArray(byteSize: Int): ByteArray {
+    return ByteBuffer
+        .allocate(byteSize)
+        .order(ByteOrder.LITTLE_ENDIAN)
+        .putLong(this)
+        .array()
+}
+
+fun Long.toBEByteArray(byteSize: Int): ByteArray {
+    return ByteBuffer
+        .allocate(byteSize)
+        .order(ByteOrder.BIG_ENDIAN)
+        .putLong(this)
+        .array()
+}
 
 fun UInt.toBEByteArray(): ByteArray {
     return ByteBuffer

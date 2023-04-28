@@ -2,6 +2,7 @@ package com.cyclone.solana.core.crypto
 
 import com.cyclone.solana.core.constants.Unit
 import com.cyclone.solana.core.usecase.Base58Decoder
+import com.cyclone.solana.core.usecase.Base58Encoder
 import com.cyclone.solana.core.usecase.SolTransferTransaction
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters
@@ -55,7 +56,7 @@ class SolTransferTransactionUnitTest {
 
         val fromAddress = "DjPi1LtwrXJMAh2AUvuUMajCpMJEKg8N1J8fU4L2Xr9D"
         val toAddress = "W5RJACTF8t4TC1LSBr4SXqkuZkFMM8yZFvRqqfM6tqM"
-        val blockhash = "E1fZFLAd1aB8xUG6mx4KuEfG4kNKXBY99W26o5RPbbvk"
+        val blockhash = "7jzpE4VGyhXViUcA77UmfK8r4ApfCK3J4mtrJKGF7EiE"
         val lamports = Unit.Units.LAMPORTS_PER_SOL
 
         val result = SolTransferTransaction.invoke(
@@ -66,6 +67,12 @@ class SolTransferTransactionUnitTest {
         ).apply {
             sign(listOf(keyPair))
         }
+
+        println(
+            Base58Encoder(
+                result.serialise()
+            )
+        )
 
         Assert.assertArrayEquals(
             expectedSigned,

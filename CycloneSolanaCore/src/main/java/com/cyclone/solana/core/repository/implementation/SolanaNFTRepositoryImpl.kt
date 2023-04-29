@@ -1,6 +1,5 @@
 package com.cyclone.solana.core.repository.implementation
 
-import android.util.Log
 import com.cyclone.solana.core.datamodel.dto.metaplex.meta_data.MetaplexMetaData
 import com.cyclone.solana.core.network.NetworkResource
 import com.cyclone.solana.core.network.api.SolanaNFTApi
@@ -17,9 +16,6 @@ class SolanaNFTRepositoryImpl(private val solanaNftApi: SolanaNFTApi): SolanaNFT
             )
 
             try {
-
-                Log.e("TEST_ME", "getNFTMetaData: $url")
-
                 emit(
                     NetworkResource.Success(solanaNftApi.getNFTMetaData(url))
                 )
